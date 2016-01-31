@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/D:/github/GetOpenData/src/getopendata/VdData.java</file>
+            <file>file:/D:/github/GetOpenData/src/getopendata/OpenDataRegularDownloader.java</file>
+            <file>file:/D:/github/GetOpenData/src/getopendata/VdDataXmlParser.java</file>
+            <file>file:/D:/github/GetOpenData/src/getopendata/HttpUtil.java</file>
+            <file>file:/D:/github/GetOpenData/src/getopendata/WriterThread.java</file>
+            <file>file:/D:/github/GetOpenData/src/getopendata/GetOpenDataTask.java</file>
+        </group>
+    </open-files>
+</project-private>
