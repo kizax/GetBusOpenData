@@ -55,7 +55,7 @@ public class GetOpenDataTask extends TimerTask {
                 xmlStr += (line + '\n');
             }
 
-            ArrayList<VdData> vdDataList = VdDataXmlParser.getVdDataList(xmlStr);
+            ArrayList<BusData> vdDataList = BusDataJsonParser.getBusDataList(xmlStr);
 
             SimpleDateFormat fileTimestampFormat = new SimpleDateFormat("_yyyy-MM-dd");
             String fileTimestamp = fileTimestampFormat.format(new Date());

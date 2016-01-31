@@ -24,16 +24,13 @@ import org.xml.sax.SAXException;
  *
  * @author kizax
  */
-public class VdDataXmlParser {
+public class BusDataJsonParser {
 
-    public static ArrayList<VdData> getVdDataList(String xmlStr) throws SAXException, IOException, ParseException, ParserConfigurationException {
+    public static ArrayList<BusData> getBusDataList(String xmlStr) throws SAXException, IOException, ParseException, ParserConfigurationException {
 
-        ArrayList<VdData> vdDataList = new ArrayList<>();
+        ArrayList<BusData> busDataList = new ArrayList<>();
 
-        DocumentBuilderFactory factory
-                = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc = builder.parse(new StringBufferInputStream(xmlStr));
+        JSONObject jsonObject = new JSONObject(responseString);
 
         String exchangeTimeStr = doc.getElementsByTagName("ExchangeTime").item(0)
                 .getTextContent();
@@ -94,16 +91,16 @@ public class VdDataXmlParser {
                             .item(i)
                             .getTextContent());
 
-                    VdData vdData = new VdData(deviceID, exchangeTime, laneNO, volume, avgSpeed, avgOccupancy, sVolume, mVolume, lVolume);
-                    vdDataList.add(vdData);
+                    BusData vdData = new BusData(deviceID, exchangeTime, laneNO, volume, avgSpeed, avgOccupancy, sVolume, mVolume, lVolume);
+                    busDataList.add(vdData);
 
                 }
 
             }
         }
 
-        System.out.println(String.format("%1$s\tNum of data rows: %2$d", TimestampUtil.getTimestampStr(), vdDataList.size()));
+        System.out.println(String.format("%1$s\tNum of data rows: %2$d", TimestampUtil.getTimestampStr(), busDataList.size()));
         
-        return vdDataList;
+        return busDataList;
     }
 }
