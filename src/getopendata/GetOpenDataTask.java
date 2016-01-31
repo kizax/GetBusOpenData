@@ -6,14 +6,11 @@
 package getopendata;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,6 +21,7 @@ import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 import javax.xml.parsers.ParserConfigurationException;
 import org.apache.http.HttpResponse;
+import org.json.JSONException;
 import org.xml.sax.SAXException;
 
 /**
@@ -35,10 +33,10 @@ public class GetOpenDataTask extends TimerTask {
     @Override
     public void run() {
 
-        System.out.println(String.format("%1$s\tVD data is downloading now.", TimestampUtil.getTimestampStr()));
+        System.out.println(String.format("%1$s\tBus data is downloading now.", TimestampUtil.getTimestampStr()));
 
         try {
-            String url = "http://data.taipei/tisv/VDDATA";
+            String url = "http://data.taipei/bus/BUSDATA";
             HttpResponse response = HttpUtil.httpGet(url);
 
             InputStream inputStream = response.getEntity().getContent();
@@ -47,19 +45,19 @@ public class GetOpenDataTask extends TimerTask {
             StringBuilder inputStringBuilder = new StringBuilder();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(gzipInputStream, "UTF-8"));
 
-            String xmlStr = "";
+            String jsonStr = "";
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 inputStringBuilder.append(line);
                 inputStringBuilder.append('\n');
-                xmlStr += (line + '\n');
+                jsonStr += (line + '\n');
             }
 
-            ArrayList<BusData> vdDataList = BusDataJsonParser.getBusDataList(xmlStr);
+            ArrayList<BusData> busDataList = BusDataJsonParser.getBusDataList(jsonStr);
 
             SimpleDateFormat fileTimestampFormat = new SimpleDateFormat("_yyyy-MM-dd");
             String fileTimestamp = fileTimestampFormat.format(new Date());
-            String csvFileName = String.format("./record/vddata%1$s.csv", fileTimestamp);
+            String csvFileName = String.format("./record/busdata%1$s.csv", fileTimestamp);
             System.out.println(String.format("%1$s\tNow start writing data into csv file <%2$s>", TimestampUtil.getTimestampStr(), csvFileName));
 
             File csvDataFile = new File(csvFileName);
@@ -72,12 +70,12 @@ public class GetOpenDataTask extends TimerTask {
             if (!csvDataFile.exists()) {
                 csvDataFile.createNewFile();
                 csvFileWriter = new FileWriter(csvDataFile, true);
-                writeCsvFile(csvFileWriter, "DeviceID, ExchangeTime, LaneNO, Volume, AvgSpeed, AvgOccupancy, Svolume, Mvolume, Lvolume");
+                writeCsvFile(csvFileWriter, "BusID, DataTime, CarType, ProviderID, CarID, DutyStatus, BusStatus, RouteID, GoBack, Longitude, Latitude, Speed, Azimuth, StopID");
             } else {
                 csvFileWriter = new FileWriter(csvDataFile, true);
             }
 
-            vdDataList.stream().forEach((vdData) -> {
+            busDataList.stream().forEach((vdData) -> {
                 writeCsvFile(csvFileWriter, vdData.toString());
             });
 
@@ -90,6 +88,8 @@ public class GetOpenDataTask extends TimerTask {
         } catch (ParseException ex) {
             Logger.getLogger(OpenDataRegularDownloader.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParserConfigurationException ex) {
+            Logger.getLogger(GetOpenDataTask.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JSONException ex) {
             Logger.getLogger(GetOpenDataTask.class.getName()).log(Level.SEVERE, null, ex);
         }
 
