@@ -15,7 +15,7 @@ public class OpenDataRegularDownloader {
         Timer timer = new Timer();
 
         System.out.println(String.format("%1$s\tIf you want to stop timer, press 12345.", TimestampUtil.getTimestampStr()));
-        System.out.println(String.format("%1$s\tStart VD Open Data Regular Downloader!", TimestampUtil.getTimestampStr()));
+        System.out.println(String.format("%1$s\tStart bus open data regular downloader!", TimestampUtil.getTimestampStr()));
         timer.schedule(new GetOpenDataTask(), date, timeInterval);
 
         while(true){

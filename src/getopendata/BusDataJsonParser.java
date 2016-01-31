@@ -6,19 +6,17 @@
 package getopendata;
 
 import java.io.IOException;
-import java.io.StringBufferInputStream;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
@@ -26,81 +24,48 @@ import org.xml.sax.SAXException;
  */
 public class BusDataJsonParser {
 
-    public static ArrayList<BusData> getBusDataList(String xmlStr) throws SAXException, IOException, ParseException, ParserConfigurationException {
+    public static ArrayList<BusData> getBusDataList(String jsonStr) throws SAXException, IOException, ParseException, ParserConfigurationException, JSONException {
 
         ArrayList<BusData> busDataList = new ArrayList<>();
 
-        JSONObject jsonObject = new JSONObject(responseString);
+        JSONObject jsonObject = new JSONObject(jsonStr);
+        JSONArray busInfoJsonArray = jsonObject.getJSONArray("BusInfo");
+        for (int i = 0; i < busInfoJsonArray.length(); i++) {
+            JSONObject busJsonObj = (JSONObject) busInfoJsonArray.get(i);
 
-        String exchangeTimeStr = doc.getElementsByTagName("ExchangeTime").item(0)
-                .getTextContent();
+            double providerId = (Double) busJsonObj.get("ProviderID");
+            String busId = busJsonObj.getString("BusID");
+            int carType = busJsonObj.getInt("CarType");
+            double carId =  (Double) busJsonObj.get("CarID");
+            int dutyStatus = busJsonObj.getInt("DutyStatus");
+            int busStatus = busJsonObj.getInt("BusStatus");
+            double routeId =  (Double) busJsonObj.get("RouteID");
+            int goBack = busJsonObj.getInt("GoBack");
+            double longitude = (Double) busJsonObj.get("Longitude");
+            double latitude =  (Double) busJsonObj.get("Latitude");
+            double speed = (Double) busJsonObj.get("Speed");
+            double azimuth =  (Double) busJsonObj.get("Azimuth");
 
-        SimpleDateFormat exchangeTimeStrFormat = new SimpleDateFormat("yyyy/MM/dd'T'HH:mm:ss"); //2016/01/30T12:12:21
+            int stopId = 0;
 
-        Date exchangeTime = (Date) exchangeTimeStrFormat.parse(exchangeTimeStr);
-
-        NodeList nodeList = doc.getElementsByTagName("VDDevice");
-        System.out.println(String.format("%1$s\tNum of VD device: %2$d", TimestampUtil.getTimestampStr(), nodeList.getLength()));
-
-        for (int nodeCount = 0; nodeCount < nodeList.getLength(); nodeCount++) {
-
-            Node node = nodeList.item(nodeCount);
-
-            if (node.getNodeType() == Node.ELEMENT_NODE) {
-
-                Element element = (Element) node;
-
-                String deviceID = element.getElementsByTagName("DeviceID")
-                        .item(0)
-                        .getTextContent();
-
-                String timeInterval = element.getElementsByTagName("TimeInterval")
-                        .item(0)
-                        .getTextContent();
-
-                int totalLaneNum = Integer.parseInt(element.getElementsByTagName("TotalOfLane").item(0)
-                        .getTextContent());
-
-                for (int i = 0; i < totalLaneNum; i++) {
-
-                    int laneNO = Integer.parseInt(element.getElementsByTagName("LaneNO")
-                            .item(i)
-                            .getTextContent());
-
-                    double volume = Double.parseDouble(element.getElementsByTagName("Volume")
-                            .item(i)
-                            .getTextContent());
-
-                    double avgSpeed = Double.parseDouble(element.getElementsByTagName("AvgSpeed")
-                            .item(i)
-                            .getTextContent());
-
-                    double avgOccupancy = Double.parseDouble(element.getElementsByTagName("AvgOccupancy")
-                            .item(i)
-                            .getTextContent());
-
-                    double sVolume = Double.parseDouble(element.getElementsByTagName("Svolume")
-                            .item(i)
-                            .getTextContent());
-
-                    double mVolume = Double.parseDouble(element.getElementsByTagName("Mvolume")
-                            .item(i)
-                            .getTextContent());
-
-                    double lVolume = Double.parseDouble(element.getElementsByTagName("Lvolume")
-                            .item(i)
-                            .getTextContent());
-
-                    BusData vdData = new BusData(deviceID, exchangeTime, laneNO, volume, avgSpeed, avgOccupancy, sVolume, mVolume, lVolume);
-                    busDataList.add(vdData);
-
-                }
-
+            Date dataTime = null;
+            String dataTimeStr = busJsonObj.getString("DataTime");
+            Pattern pattern = Pattern.compile("(\\d){13}");
+            Matcher matcher = pattern.matcher(dataTimeStr);
+            if (matcher.find()) {
+                long dateTimeLong = Long.parseLong(matcher.group(0));
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(dateTimeLong);
+                dataTime = calendar.getTime();
             }
-        }
 
+            BusData busData = new BusData(providerId, busId, carType, carId, dutyStatus, busStatus, routeId, goBack, longitude, latitude, speed, azimuth, dataTime, stopId);
+
+            System.out.println(busData.toString());
+            busDataList.add(busData);
+        }
         System.out.println(String.format("%1$s\tNum of data rows: %2$d", TimestampUtil.getTimestampStr(), busDataList.size()));
-        
+
         return busDataList;
     }
 }
