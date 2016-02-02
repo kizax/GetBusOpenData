@@ -1,18 +1,21 @@
+package getopendata;
+
+import java.text.SimpleDateFormat;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Map;
+import java.util.Map.Entry;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package getopendata;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  *
  * @author kizax
  */
-public class BusData {
+public class BusEventData {
 
     private final double providerId;
     private final String busId;
@@ -22,14 +25,25 @@ public class BusData {
     private final int busStatus;
     private final double routeId;
     private final int goBack;
-    private final double longitude;
-    private final double latitude;
-    private final double speed;
-    private final double azimuth;
     private final Date dataTime;
-    private int stopId;
+    private final int stopId;
+    private final int carOnStop;
 
-    public BusData(double providerId, String busId, int carType, double carId, int dutyStatus, int busStatus, double routeId, int goBack, double longitude, double latitude, double speed, double azimuth, Date dataTime, int stopId) {
+    /**
+     *
+     * @param providerId
+     * @param busId
+     * @param carType
+     * @param carId
+     * @param dutyStatus
+     * @param busStatus
+     * @param routeId
+     * @param goBack
+     * @param stopId
+     * @param carOnStop
+     * @param dataTime
+     */
+    public BusEventData(double providerId, String busId, int carType, double carId, int dutyStatus, int busStatus, double routeId, int goBack, int stopId, int carOnStop, Date dataTime) {
 
         this.providerId = providerId;
         this.busId = busId;
@@ -39,18 +53,15 @@ public class BusData {
         this.busStatus = busStatus;
         this.routeId = routeId;
         this.goBack = goBack;
-        this.longitude = longitude;
-        this.latitude = latitude;
-        this.speed = speed;
-        this.azimuth = azimuth;
-        this.dataTime = dataTime;
         this.stopId = stopId;
+        this.carOnStop = carOnStop;
+        this.dataTime = dataTime;
 
     }
 
     @Override
     public String toString() {
-        String vdDataStr = String.format("%1$s, %2$s, %3$d, %4$.1f, %5$.1f, %6$d, %7$d, %8$.1f, %9$d, %10$.6f, %11$.6f, %12$.1f, %13$.1f, %14$d", busId, this.getTimeStr(), carType, providerId, carId, dutyStatus, busStatus, routeId, goBack, longitude, latitude, speed, azimuth, getStopId());
+        String vdDataStr = String.format("%1$s, %2$s, %3$d, %4$.1f, %5$.1f, %6$d, %7$d, %8$.1f, %9$d, %10$d, %11$d", getBusId(), this.getTimeStr(), getCarType(), getProviderId(), getCarId(), getDutyStatus(), getBusStatus(), getRouteId(), getGoBack(), getStopId(), getCarOnStop());
         return vdDataStr;
     }
 
@@ -61,16 +72,16 @@ public class BusData {
     }
 
     /**
-     * @return the providerID
+     * @return the providerId
      */
-    public double getProviderID() {
+    public double getProviderId() {
         return providerId;
     }
 
     /**
-     * @return the busID
+     * @return the busId
      */
-    public String getBusID() {
+    public String getBusId() {
         return busId;
     }
 
@@ -103,9 +114,9 @@ public class BusData {
     }
 
     /**
-     * @return the routeID
+     * @return the routeId
      */
-    public double getRouteID() {
+    public double getRouteId() {
         return routeId;
     }
 
@@ -114,34 +125,6 @@ public class BusData {
      */
     public int getGoBack() {
         return goBack;
-    }
-
-    /**
-     * @return the longitude
-     */
-    public double getLongitude() {
-        return longitude;
-    }
-
-    /**
-     * @return the latitude
-     */
-    public double getLatitude() {
-        return latitude;
-    }
-
-    /**
-     * @return the speed
-     */
-    public double getSpeed() {
-        return speed;
-    }
-
-    /**
-     * @return the azimuth
-     */
-    public double getAzimuth() {
-        return azimuth;
     }
 
     /**
@@ -159,10 +142,9 @@ public class BusData {
     }
 
     /**
-     * @param stopId the stopId to set
+     * @return the carOnStop
      */
-    public void setStopId(int stopId) {
-        this.stopId = stopId;
+    public int getCarOnStop() {
+        return carOnStop;
     }
-
 }

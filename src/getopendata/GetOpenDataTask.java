@@ -15,7 +15,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 import java.util.TimerTask;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
@@ -36,24 +38,33 @@ public class GetOpenDataTask extends TimerTask {
         System.out.println(String.format("%1$s\tBus data is downloading now.", TimestampUtil.getTimestampStr()));
 
         try {
-            String url = "http://data.taipei/bus/BUSDATA";
-            HttpResponse response = HttpUtil.httpGet(url);
+            String busDataUrl = "http://data.taipei/bus/BUSDATA";
+            HttpResponse httpResponse = HttpUtil.httpGet(busDataUrl);
 
-            InputStream inputStream = response.getEntity().getContent();
-            GZIPInputStream gzipInputStream = new GZIPInputStream(inputStream);
+            String busDataJsonStr = getStrFromResponse(httpResponse);
+            ArrayList<BusData> tempBusDataList = BusDataJsonParser.getBusDataList(busDataJsonStr);
 
-            StringBuilder inputStringBuilder = new StringBuilder();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(gzipInputStream, "UTF-8"));
+            String busEventDataUrl = "http://data.taipei/bus/BUSEVENT";
+            httpResponse = HttpUtil.httpGet(busEventDataUrl);
 
-            String jsonStr = "";
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                inputStringBuilder.append(line);
-                inputStringBuilder.append('\n');
-                jsonStr += (line + '\n');
+            String busEventDataJsonStr = getStrFromResponse(httpResponse);
+            ArrayList<BusEventData> busEventDataList = BusDataJsonParser.getBusEventDataList(busEventDataJsonStr);
+
+            Map<Double, BusEventData> busEventDataTreeMap = new TreeMap<>(new BusEventDataComparator());
+            busEventDataList.stream().forEach((busEventData) -> {
+                busEventDataTreeMap.put(busEventData.getCarId(), busEventData);
+            });
+
+            ArrayList<BusData> busDataList = BusDataJsonParser.getBusDataList(busDataJsonStr);
+            for (BusData busData : tempBusDataList) {
+                if (busEventDataTreeMap.containsKey(busData.getCarId())) {
+                    BusEventData busEventData = busEventDataTreeMap.get(busData.getCarId());
+                    busData.setStopId(busEventData.getStopId());
+                    busDataList.add(busData);
+                }else{
+                    busDataList.add(busData);
+                }
             }
-
-            ArrayList<BusData> busDataList = BusDataJsonParser.getBusDataList(jsonStr);
 
             SimpleDateFormat fileTimestampFormat = new SimpleDateFormat("_yyyy-MM-dd");
             String fileTimestamp = fileTimestampFormat.format(new Date());
@@ -98,6 +109,23 @@ public class GetOpenDataTask extends TimerTask {
     private void writeCsvFile(FileWriter csvFileWriter, String record) {
         WriterThread writerThread = new WriterThread(csvFileWriter, record);
         writerThread.start();
+    }
+
+    private String getStrFromResponse(HttpResponse response) throws IOException {
+        InputStream inputStream = response.getEntity().getContent();
+        GZIPInputStream gzipInputStream = new GZIPInputStream(inputStream);
+
+        StringBuilder inputStringBuilder = new StringBuilder();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(gzipInputStream, "UTF-8"));
+
+        String jsonStr = "";
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            inputStringBuilder.append(line);
+            inputStringBuilder.append('\n');
+            jsonStr += (line + '\n');
+        }
+        return jsonStr;
     }
 
 }

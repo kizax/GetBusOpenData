@@ -36,15 +36,18 @@ public class BusDataJsonParser {
             double providerId = (Double) busJsonObj.get("ProviderID");
             String busId = busJsonObj.getString("BusID");
             int carType = busJsonObj.getInt("CarType");
-            double carId =  (Double) busJsonObj.get("CarID");
+            double carId = (Double) busJsonObj.get("CarID");
             int dutyStatus = busJsonObj.getInt("DutyStatus");
-            int busStatus = busJsonObj.getInt("BusStatus");
-            double routeId =  (Double) busJsonObj.get("RouteID");
+
+            String tempStr = (String) busJsonObj.get("BusStatus");
+            int busStatus = (tempStr == null ? 0 : tempStr.trim().isEmpty() ? 0 : Integer.parseInt(tempStr));
+
+            double routeId = (Double) busJsonObj.get("RouteID");
             int goBack = busJsonObj.getInt("GoBack");
             double longitude = (Double) busJsonObj.get("Longitude");
-            double latitude =  (Double) busJsonObj.get("Latitude");
+            double latitude = (Double) busJsonObj.get("Latitude");
             double speed = (Double) busJsonObj.get("Speed");
-            double azimuth =  (Double) busJsonObj.get("Azimuth");
+            double azimuth = (Double) busJsonObj.get("Azimuth");
 
             int stopId = 0;
 
@@ -67,5 +70,44 @@ public class BusDataJsonParser {
         System.out.println(String.format("%1$s\tNum of data rows: %2$d", TimestampUtil.getTimestampStr(), busDataList.size()));
 
         return busDataList;
+    }
+
+    public static ArrayList<BusEventData> getBusEventDataList(String jsonStr) throws SAXException, IOException, ParseException, ParserConfigurationException, JSONException {
+
+        ArrayList<BusEventData> busEventDataList = new ArrayList<>();
+
+        JSONObject jsonObject = new JSONObject(jsonStr);
+        JSONArray busInfoJsonArray = jsonObject.getJSONArray("BusInfo");
+        for (int i = 0; i < busInfoJsonArray.length(); i++) {
+            JSONObject busJsonObj = (JSONObject) busInfoJsonArray.get(i);
+
+            double providerId = (Double) busJsonObj.get("ProviderID");
+            String busId = busJsonObj.getString("BusID");
+            int carType = busJsonObj.getInt("CarType");
+            double carId = (Double) busJsonObj.get("CarID");
+            int dutyStatus = busJsonObj.getInt("DutyStatus");
+            int busStatus = busJsonObj.getInt("BusStatus");
+            double routeId = (Double) busJsonObj.get("RouteID");
+            int goBack = busJsonObj.getInt("GoBack");
+            int stopId = busJsonObj.getInt("StopID");
+            int carOnStop = busJsonObj.getInt("CarOnStop");
+
+            Date dataTime = null;
+            String dataTimeStr = busJsonObj.getString("DataTime");
+            Pattern pattern = Pattern.compile("(\\d){13}");
+            Matcher matcher = pattern.matcher(dataTimeStr);
+            if (matcher.find()) {
+                long dateTimeLong = Long.parseLong(matcher.group(0));
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(dateTimeLong);
+                dataTime = calendar.getTime();
+            }
+
+            BusEventData busEventData = new BusEventData(providerId, busId, carType, carId, dutyStatus, busStatus, routeId, goBack, stopId, carOnStop, dataTime);
+            System.out.println(busEventData.toString());
+            busEventDataList.add(busEventData);
+        }
+        System.out.println(String.format("%1$s\tNum of data rows: %2$d", TimestampUtil.getTimestampStr(), busEventDataList.size()));
+        return busEventDataList;
     }
 }
