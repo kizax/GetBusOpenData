@@ -118,14 +118,12 @@ public class BusDataJsonParser {
         ArrayList<RouteData> routeDataList = new ArrayList<>();
 
         JSONObject jsonObject = new JSONObject(jsonStr);
-        JSONObject kmlJsonObject = jsonObject.getJSONObject("kml");
-        JSONObject folderJsonObject = kmlJsonObject.getJSONObject("Folder");
-        JSONArray routeDataJsonArray = folderJsonObject.getJSONArray("Placemark");
+        JSONArray routeDataJsonArray = jsonObject.getJSONArray("BusInfo");
         for (int i = 0; i < routeDataJsonArray.length(); i++) {
             JSONObject routeJsonObj = (JSONObject) routeDataJsonArray.get(i);
 
-            int routeId = routeJsonObj.getInt("@id");
-            String routeName = routeJsonObj.getString("name");
+            int routeId = routeJsonObj.getInt("pathAttributeId");
+            String routeName = routeJsonObj.getString("pathAttributeName");
 
             RouteData routeData = new RouteData(routeId, routeName);
             System.out.println(routeData.toString());
@@ -144,8 +142,8 @@ public class BusDataJsonParser {
         for (int i = 0; i < stopLocationDataJsonArray.length(); i++) {
             JSONObject stopLocationJsonObj = (JSONObject) stopLocationDataJsonArray.get(i);
 
-            double stopId = (double)stopLocationJsonObj.get("id");
-            String stopLocationName = stopLocationJsonObj.getString("name");
+            double stopId = (double)stopLocationJsonObj.get("Id");
+            String stopLocationName = stopLocationJsonObj.getString("nameZh");
 
             StopLocationData stopLocationData = new StopLocationData(stopId, stopLocationName);
             System.out.println(stopLocationData.toString());

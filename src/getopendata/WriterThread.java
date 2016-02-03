@@ -29,11 +29,11 @@ public class WriterThread extends Thread {
         super.run();
         try {
 
-            byte[] ansi = record.getBytes(StandardCharsets.UTF_8);
-            String recordAsciiStr = new String(ansi,StandardCharsets.ISO_8859_1);
+//            byte[] ansi = record.getBytes(StandardCharsets.UTF_8);
+//            String recordAsciiStr = new String(ansi,StandardCharsets.);
 
             synchronized (txtFileWriter) {
-                txtFileWriter.write(recordAsciiStr + "\n");
+                txtFileWriter.write(record + "\n");
                 txtFileWriter.flush();
             }
         } catch (IOException e) {

@@ -4,16 +4,24 @@
 			"name" : "臺北市",
 			"CenterName" : "臺北市動態資訊中心"
 		},
-		"UpdateTime" : "2016-02-02 20:13:20",
+		"UpdateTime" : "2016-02-03 10:54:29",
 		"CoordinateSystem" : "WGS84"
 	},
 	"BusInfo" : [{
-			"id" : 1101.0,
-			"name" : "清白里",
-			"address" : "金湖路23號同向(向東)",
-			"lon" : 121.59567870,
-			"lat" : "25.08329381",
-			"version" : 0.0
+			"Id" : 148536.0,
+			"routeId" : 10891.0,
+			"nameZh" : "蘆洲站",
+			"nameEn" : "Luzhou Sta.",
+			"seqNo" : 0.0,
+			"pgp" : 0.0,
+			"longitude" : 121.469310,
+			"latitude" : 25.079040,
+			"goBack" : "0",
+			"address" : null,
+			"stopLocationId" : 3694.0,
+			"showLon" : 121.46918050,
+			"showLat" : 25.07853582,
+			"vector" : "999"
 		}
 	]
 }

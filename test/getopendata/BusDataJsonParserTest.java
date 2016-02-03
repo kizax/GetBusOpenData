@@ -74,7 +74,7 @@ public class BusDataJsonParserTest {
     public void testGetRouteDataList() throws Exception {
         System.out.println("getRouteDataList");
         String jsonStr = new Scanner(new File("./testdata/routeData.json")).useDelimiter("\\Z").next();
-        String expResult = "10473, 306";
+        String expResult = "104620.0, 645副經三總";
         ArrayList<RouteData> resultRouteDataList = BusDataJsonParser.getRouteDataList(jsonStr);
         String result = resultRouteDataList.get(0).toString();
         assertEquals(expResult, result);
@@ -87,7 +87,7 @@ public class BusDataJsonParserTest {
     public void testGetStopLocationDataList() throws Exception {
         System.out.println("getStopLocationDataList");
         String jsonStr = new Scanner(new File("./testdata/stopLocationData.json")).useDelimiter("\\Z").next();
-        String expResult = "1101.0, 清白里";
+        String expResult = "148536.0, 蘆洲站";
         ArrayList<StopLocationData> resultStopLocationDataList = BusDataJsonParser.getStopLocationDataList(jsonStr);
         String result = resultStopLocationDataList.get(0).toString();
         assertEquals(expResult, result);

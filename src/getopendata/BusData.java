@@ -69,7 +69,7 @@ public class BusData {
     /**
      * @return the providerID
      */
-    public double getProviderID() {
+    public double getProviderId() {
         return providerId;
     }
 
@@ -111,7 +111,7 @@ public class BusData {
     /**
      * @return the routeID
      */
-    public double getRouteID() {
+    public double getRouteId() {
         return routeId;
     }
 

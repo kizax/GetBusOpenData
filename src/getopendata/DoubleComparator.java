@@ -10,7 +10,7 @@ import java.util.Comparator;
  *
  * @author kizax
  */
-public class BusEventDataComparator implements Comparator<Double> {
+public class DoubleComparator implements Comparator<Double> {
 
     @Override
     public int compare(Double o1,

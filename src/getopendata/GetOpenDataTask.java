@@ -45,23 +45,34 @@ public class GetOpenDataTask extends TimerTask {
             ArrayList<BusData> tempBusDataList = BusDataJsonParser.getBusDataList(busDataJsonStr);
 
             String busEventDataUrl = "http://data.taipei/bus/BUSEVENT";
+            String routeDataUrl = "http://data.taipei/bus/ROUTE";
+            String stopLocationDataUrl = "http://data.taipei/bus/Stop";
+            String providerDataUrl = "http://data.taipei/bus/PROVIDER";
+
             HttpResponse busEventDataHttpResponse = HttpUtil.httpGet(busEventDataUrl);
+            HttpResponse routeDataHttpResponse = HttpUtil.httpGet(routeDataUrl);
+            HttpResponse stopLocationHttpResponse = HttpUtil.httpGet(stopLocationDataUrl);
+            HttpResponse providerDataHttpResponse = HttpUtil.httpGet(providerDataUrl);
 
             String busEventDataJsonStr = getStrFromResponse(busEventDataHttpResponse);
             ArrayList<BusEventData> busEventDataList = BusDataJsonParser.getBusEventDataList(busEventDataJsonStr);
 
-            String routeDataUrl = "http://data.taipei/bus/ROUTEGeom";
-            HttpResponse routeDataHttpResponse = HttpUtil.httpGet(routeDataUrl);
-
             String routeDataJsonStr = getStrFromResponse(routeDataHttpResponse);
             ArrayList<RouteData> routeDataList = BusDataJsonParser.getRouteDataList(routeDataJsonStr);
 
-            Map<Double, BusEventData> busEventDataTreeMap = new TreeMap<>(new BusEventDataComparator());
+            String stopLocationDataJsonStr = getStrFromResponse(stopLocationHttpResponse);
+            ArrayList<StopLocationData> stopLocationDataList = BusDataJsonParser.getStopLocationDataList(stopLocationDataJsonStr);
+
+            String providerDataJsonStr = getStrFromResponse(providerDataHttpResponse);
+            ArrayList<ProviderData> providerDataList = BusDataJsonParser.getProviderDataList(providerDataJsonStr);
+
+            //塞入stopId
+            Map<Double, BusEventData> busEventDataTreeMap = new TreeMap<>(new DoubleComparator());
             busEventDataList.stream().forEach((busEventData) -> {
                 busEventDataTreeMap.put(busEventData.getCarId(), busEventData);
             });
 
-            ArrayList<BusData> busDataList = BusDataJsonParser.getBusDataList(busDataJsonStr);
+            ArrayList<BusData> busDataList = new ArrayList<>(tempBusDataList);
             for (BusData busData : tempBusDataList) {
                 if (busEventDataTreeMap.containsKey(busData.getCarId())) {
                     BusEventData busEventData = busEventDataTreeMap.get(busData.getCarId());
@@ -71,6 +82,61 @@ public class GetOpenDataTask extends TimerTask {
                     busDataList.add(busData);
                 }
             }
+            tempBusDataList = new ArrayList<>(busDataList);
+
+            //塞入stopLocationName
+            Map<Double, StopLocationData> stopLocationDataTreeMap = new TreeMap<>(new DoubleComparator());
+            stopLocationDataList.stream().forEach((stopLocationData) -> {
+                stopLocationDataTreeMap.put(stopLocationData.getStopId(), stopLocationData);
+            });
+
+            busDataList = new ArrayList<>(tempBusDataList);
+            for (BusData busData : tempBusDataList) {
+                if (stopLocationDataTreeMap.containsKey((double) busData.getStopId())) {
+                    StopLocationData stopLocationData = stopLocationDataTreeMap.get((double) busData.getStopId());
+                    busData.setStopLocationName(stopLocationData.getStopLocationName());
+                    busDataList.add(busData);
+                } else {
+                    busDataList.add(busData);
+                }
+            }
+            tempBusDataList = new ArrayList<>(busDataList);
+
+            //塞入routeName
+            Map<Double, RouteData> routeDataTreeMap = new TreeMap<>(new DoubleComparator());
+            routeDataList.stream().forEach((routeData) -> {
+                routeDataTreeMap.put(routeData.getRouteId(), routeData);
+            });
+
+            busDataList = new ArrayList<>(tempBusDataList);
+            for (BusData busData : tempBusDataList) {
+                if (routeDataTreeMap.containsKey(busData.getRouteId())) {
+                    RouteData routeData = routeDataTreeMap.get(busData.getRouteId());
+                    busData.setRouteName(routeData.getRouteName());
+                    busDataList.add(busData);
+                } else {
+                    busDataList.add(busData);
+                }
+            }
+            tempBusDataList = new ArrayList<>(busDataList);
+
+            //塞入providerName
+            Map<Double, ProviderData> providerDataTreeMap = new TreeMap<>(new DoubleComparator());
+            providerDataList.stream().forEach((providerData) -> {
+                providerDataTreeMap.put(providerData.getProviderId(), providerData);
+            });
+
+            busDataList = new ArrayList<>(tempBusDataList);
+            for (BusData busData : tempBusDataList) {
+                if (providerDataTreeMap.containsKey(busData.getProviderId())) {
+                    ProviderData providerData = providerDataTreeMap.get(busData.getProviderId());
+                    busData.setProviderName(providerData.getProviderName());
+                    busDataList.add(busData);
+                } else {
+                    busDataList.add(busData);
+                }
+            }
+            tempBusDataList = new ArrayList<>(busDataList);
 
             SimpleDateFormat fileTimestampFormat = new SimpleDateFormat("_yyyy-MM-dd");
             String fileTimestamp = fileTimestampFormat.format(new Date());
@@ -87,7 +153,7 @@ public class GetOpenDataTask extends TimerTask {
             if (!csvDataFile.exists()) {
                 csvDataFile.createNewFile();
                 csvFileWriter = new FileWriter(csvDataFile, true);
-                writeCsvFile(csvFileWriter, "BusID, DataTime, CarType, ProviderID, CarID, DutyStatus, BusStatus, RouteID, GoBack, Longitude, Latitude, Speed, Azimuth, StopID");
+                writeCsvFile(csvFileWriter, " DataTime,  CarType, ProviderID, ProviderName, CarID, BusId, DutyStatus, BusStatus, RouteID	, RouteName,  GoBack, Longitude,  Latitude, Speed, Azimuth, StopID, StopLocationName");
             } else {
                 csvFileWriter = new FileWriter(csvDataFile, true);
             }

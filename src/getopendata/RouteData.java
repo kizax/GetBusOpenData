@@ -11,7 +11,7 @@ package getopendata;
  */
 public class RouteData {
 
-    private final int routeId;
+    private final double routeId;
     private final String routeName;
 
     public RouteData(int routeId, String routeName) {
@@ -21,14 +21,14 @@ public class RouteData {
 
     @Override
     public String toString() {
-        String vdDataStr = String.format("%1$d, %2$s", routeId, routeName);
+        String vdDataStr = String.format("%1$.1f, %2$s", routeId, routeName);
         return vdDataStr;
     }
 
     /**
      * @return the routeId
      */
-    public int getRouteId() {
+    public double getRouteId() {
         return routeId;
     }
 

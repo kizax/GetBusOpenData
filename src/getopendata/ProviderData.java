@@ -10,8 +10,8 @@ package getopendata;
  * @author kizax
  */
 public class ProviderData {
-    
-        private final double providerId;
+
+    private final double providerId;
     private final String providerName;
 
     ProviderData(double providerId, String providerName) {
@@ -21,8 +21,22 @@ public class ProviderData {
 
     @Override
     public String toString() {
-        String vdDataStr = String.format("%1$.1f, %2$s", providerId, providerName);
+        String vdDataStr = String.format("%1$.1f, %2$s", getProviderId(), getProviderName());
         return vdDataStr;
     }
-    
+
+    /**
+     * @return the providerId
+     */
+    public double getProviderId() {
+        return providerId;
+    }
+
+    /**
+     * @return the providerName
+     */
+    public String getProviderName() {
+        return providerName;
+    }
+
 }
