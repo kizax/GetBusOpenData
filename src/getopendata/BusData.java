@@ -56,11 +56,11 @@ public class BusData {
 
     @Override
     public String toString() {
-        String vdDataStr = String.format("%1$s, %2$d, %3$.1f, %4$s, %5$.1f, %6$s, %7$d, %8$d, %9$.1f, %10$s, %11$d, %12$.6f, %13$.6f, %14$.6f, %15$.6f, %16$d, %17$s", this.getTimeStr(), carType, providerId,providerName, carId, busId, dutyStatus, busStatus, routeId, routeName, goBack, longitude, latitude, speed, azimuth, stopId, stopLocationName);
+        String vdDataStr = String.format("%1$s, %2$d, %3$.1f, %4$s, %5$.1f, %6$s, %7$d, %8$d, %9$.1f, %10$s, %11$d, %12$.6f, %13$.6f, %14$.6f, %15$.6f, %16$d, %17$s", this.getTimeStr(), carType, providerId, getProviderName(), carId, busId, dutyStatus, busStatus, routeId, getRouteName(), goBack, longitude, latitude, speed, azimuth, stopId, getStopLocationName());
         return vdDataStr;
     }
 
-    private String getTimeStr() {
+    String getTimeStr() {
         SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //2016-01-15 00:00:00
         String timeStr = timeFormat.format(getDataTime());
         return timeStr;
@@ -76,7 +76,7 @@ public class BusData {
     /**
      * @return the busID
      */
-    public String getBusID() {
+    public String getBusId() {
         return busId;
     }
 
@@ -190,6 +190,27 @@ public class BusData {
      */
     public void setProviderName(String providerName) {
         this.providerName = providerName;
+    }
+
+    /**
+     * @return the stopLocationName
+     */
+    public String getStopLocationName() {
+        return stopLocationName;
+    }
+
+    /**
+     * @return the routeName
+     */
+    public String getRouteName() {
+        return routeName;
+    }
+
+    /**
+     * @return the providerName
+     */
+    public String getProviderName() {
+        return providerName;
     }
 
 }

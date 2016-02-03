@@ -12,7 +12,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 
-public class HttpUtil {
+public class HttpUtils {
 
     public static HttpResponse httpGet(String url) throws IOException {
 

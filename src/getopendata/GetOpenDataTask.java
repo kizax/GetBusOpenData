@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,11 +36,11 @@ public class GetOpenDataTask extends TimerTask {
     @Override
     public void run() {
 
-        System.out.println(String.format("%1$s\tBus data is downloading now.", TimestampUtil.getTimestampStr()));
+        System.out.println(String.format("%1$s\tBus data is downloading now.", TimestampUtils.getTimestampStr()));
 
         try {
             String busDataUrl = "http://data.taipei/bus/BUSDATA";
-            HttpResponse busDataHttpResponse = HttpUtil.httpGet(busDataUrl);
+            HttpResponse busDataHttpResponse = HttpUtils.httpGet(busDataUrl);
 
             String busDataJsonStr = getStrFromResponse(busDataHttpResponse);
             ArrayList<BusData> tempBusDataList = BusDataJsonParser.getBusDataList(busDataJsonStr);
@@ -49,10 +50,10 @@ public class GetOpenDataTask extends TimerTask {
             String stopLocationDataUrl = "http://data.taipei/bus/Stop";
             String providerDataUrl = "http://data.taipei/bus/PROVIDER";
 
-            HttpResponse busEventDataHttpResponse = HttpUtil.httpGet(busEventDataUrl);
-            HttpResponse routeDataHttpResponse = HttpUtil.httpGet(routeDataUrl);
-            HttpResponse stopLocationHttpResponse = HttpUtil.httpGet(stopLocationDataUrl);
-            HttpResponse providerDataHttpResponse = HttpUtil.httpGet(providerDataUrl);
+            HttpResponse busEventDataHttpResponse = HttpUtils.httpGet(busEventDataUrl);
+            HttpResponse routeDataHttpResponse = HttpUtils.httpGet(routeDataUrl);
+            HttpResponse stopLocationHttpResponse = HttpUtils.httpGet(stopLocationDataUrl);
+            HttpResponse providerDataHttpResponse = HttpUtils.httpGet(providerDataUrl);
 
             String busEventDataJsonStr = getStrFromResponse(busEventDataHttpResponse);
             ArrayList<BusEventData> busEventDataList = BusDataJsonParser.getBusEventDataList(busEventDataJsonStr);
@@ -141,7 +142,7 @@ public class GetOpenDataTask extends TimerTask {
             SimpleDateFormat fileTimestampFormat = new SimpleDateFormat("_yyyy-MM-dd");
             String fileTimestamp = fileTimestampFormat.format(new Date());
             String csvFileName = String.format("./record/busdata%1$s.csv", fileTimestamp);
-            System.out.println(String.format("%1$s\tNow start writing data into csv file <%2$s>", TimestampUtil.getTimestampStr(), csvFileName));
+            System.out.println(String.format("%1$s\tNow start writing data into csv file <%2$s>", TimestampUtils.getTimestampStr(), csvFileName));
 
             File csvDataFile = new File(csvFileName);
 
@@ -153,16 +154,19 @@ public class GetOpenDataTask extends TimerTask {
             if (!csvDataFile.exists()) {
                 csvDataFile.createNewFile();
                 csvFileWriter = new FileWriter(csvDataFile, true);
-                writeCsvFile(csvFileWriter, " DataTime,  CarType, ProviderID, ProviderName, CarID, BusId, DutyStatus, BusStatus, RouteID	, RouteName,  GoBack, Longitude,  Latitude, Speed, Azimuth, StopID, StopLocationName");
+                writeCsvFile(csvFileWriter, " DataTime,  CarType, ProviderID, ProviderName, CarID, BusId, DutyStatus, BusStatus, RouteID, RouteName,  GoBack, Longitude,  Latitude, Speed, Azimuth, StopID, StopLocationName");
             } else {
                 csvFileWriter = new FileWriter(csvDataFile, true);
             }
 
-            busDataList.stream().forEach((vdData) -> {
-                writeCsvFile(csvFileWriter, vdData.toString());
-            });
+            BusDataDaoImpl busDataDaoImpl = new BusDataDaoImpl();
 
-            System.out.println(String.format("%1$s\tSuccessfully writing data into csv file <%2$s>", TimestampUtil.getTimestampStr(), csvFileName));
+            for (BusData busData : busDataList) {
+                writeCsvFile(csvFileWriter, busData.toString());
+                busDataDaoImpl.add(busData);
+            }
+
+            System.out.println(String.format("%1$s\tSuccessfully writing data into csv file <%2$s>", TimestampUtils.getTimestampStr(), csvFileName));
 
         } catch (IOException ex) {
             Logger.getLogger(OpenDataRegularDownloader.class.getName()).log(Level.SEVERE, null, ex);
@@ -173,6 +177,8 @@ public class GetOpenDataTask extends TimerTask {
         } catch (ParserConfigurationException ex) {
             Logger.getLogger(GetOpenDataTask.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JSONException ex) {
+            Logger.getLogger(GetOpenDataTask.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
             Logger.getLogger(GetOpenDataTask.class.getName()).log(Level.SEVERE, null, ex);
         }
 

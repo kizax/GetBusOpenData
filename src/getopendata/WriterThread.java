@@ -11,8 +11,6 @@ package getopendata;
  */
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 public class WriterThread extends Thread {
 
@@ -28,9 +26,6 @@ public class WriterThread extends Thread {
     public void run() {
         super.run();
         try {
-
-//            byte[] ansi = record.getBytes(StandardCharsets.UTF_8);
-//            String recordAsciiStr = new String(ansi,StandardCharsets.);
 
             synchronized (txtFileWriter) {
                 txtFileWriter.write(record + "\n");

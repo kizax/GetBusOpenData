@@ -14,8 +14,8 @@ public class OpenDataRegularDownloader {
         Date date = new Date();
         Timer timer = new Timer();
 
-        System.out.println(String.format("%1$s\tIf you want to stop timer, press 12345.", TimestampUtil.getTimestampStr()));
-        System.out.println(String.format("%1$s\tStart bus open data regular downloader!", TimestampUtil.getTimestampStr()));
+        System.out.println(String.format("%1$s\tIf you want to stop timer, press 12345.", TimestampUtils.getTimestampStr()));
+        System.out.println(String.format("%1$s\tStart bus open data regular downloader!", TimestampUtils.getTimestampStr()));
         timer.schedule(new GetOpenDataTask(), date, timeInterval);
 
         while(true){
@@ -23,7 +23,7 @@ public class OpenDataRegularDownloader {
             int stopSign = scanner.nextInt();
             if (stopSign == 12345) {
                 timer.cancel();
-                System.out.println(String.format("%1$s\tThe timer stop.", TimestampUtil.getTimestampStr()));
+                System.out.println(String.format("%1$s\tThe timer stop.", TimestampUtils.getTimestampStr()));
                 break;
             }
         }

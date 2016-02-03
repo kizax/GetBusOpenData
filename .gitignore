@@ -12,4 +12,5 @@ nbdist/
 nbactions.xml
 .nb-gradle/
 /record
+/dbsetting
 

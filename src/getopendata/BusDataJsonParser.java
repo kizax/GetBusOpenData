@@ -69,7 +69,7 @@ public class BusDataJsonParser {
             System.out.println(busData.toString());
             busDataList.add(busData);
         }
-        System.out.println(String.format("%1$s\tNum of bus data rows: %2$d", TimestampUtil.getTimestampStr(), busDataList.size()));
+        System.out.println(String.format("%1$s\tNum of bus data rows: %2$d", TimestampUtils.getTimestampStr(), busDataList.size()));
 
         return busDataList;
     }
@@ -109,7 +109,7 @@ public class BusDataJsonParser {
             System.out.println(busEventData.toString());
             busEventDataList.add(busEventData);
         }
-        System.out.println(String.format("%1$s\tNum of bus event data rows: %2$d", TimestampUtil.getTimestampStr(), busEventDataList.size()));
+        System.out.println(String.format("%1$s\tNum of bus event data rows: %2$d", TimestampUtils.getTimestampStr(), busEventDataList.size()));
         return busEventDataList;
     }
 
@@ -129,7 +129,7 @@ public class BusDataJsonParser {
             System.out.println(routeData.toString());
             routeDataList.add(routeData);
         }
-        System.out.println(String.format("%1$s\tNum of route data rows: %2$d", TimestampUtil.getTimestampStr(), routeDataList.size()));
+        System.out.println(String.format("%1$s\tNum of route data rows: %2$d", TimestampUtils.getTimestampStr(), routeDataList.size()));
         return routeDataList;
     }
 
@@ -149,7 +149,7 @@ public class BusDataJsonParser {
             System.out.println(stopLocationData.toString());
             stopLocationDataList.add(stopLocationData);
         }
-        System.out.println(String.format("%1$s\tNum of route data rows: %2$d", TimestampUtil.getTimestampStr(), stopLocationDataList.size()));
+        System.out.println(String.format("%1$s\tNum of route data rows: %2$d", TimestampUtils.getTimestampStr(), stopLocationDataList.size()));
         return stopLocationDataList;
     }
     
@@ -170,7 +170,7 @@ public class BusDataJsonParser {
             System.out.println(providerData.toString());
             providerDataList.add(providerData);
         }
-        System.out.println(String.format("%1$s\tNum of route data rows: %2$d", TimestampUtil.getTimestampStr(), providerDataList.size()));
+        System.out.println(String.format("%1$s\tNum of route data rows: %2$d", TimestampUtils.getTimestampStr(), providerDataList.size()));
         return providerDataList;
     }
 
