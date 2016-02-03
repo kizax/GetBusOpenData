@@ -1,0 +1,19 @@
+{
+	"EssentialInfo" : {
+		"Location" : {
+			"name" : "臺北市",
+			"CenterName" : "臺北市動態資訊中心"
+		},
+		"UpdateTime" : "2016-02-02 20:13:20",
+		"CoordinateSystem" : "WGS84"
+	},
+	"BusInfo" : [{
+			"id" : 1101.0,
+			"name" : "清白里",
+			"address" : "金湖路23號同向(向東)",
+			"lon" : 121.59567870,
+			"lat" : "25.08329381",
+			"version" : 0.0
+		}
+	]
+}

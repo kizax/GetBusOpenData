@@ -28,8 +28,11 @@ public class BusData {
     private final double azimuth;
     private final Date dataTime;
     private int stopId;
+    private String stopLocationName;
+    private String routeName;
+    private String providerName;
 
-    public BusData(double providerId, String busId, int carType, double carId, int dutyStatus, int busStatus, double routeId, int goBack, double longitude, double latitude, double speed, double azimuth, Date dataTime, int stopId) {
+    public BusData(double providerId, String busId, int carType, double carId, int dutyStatus, int busStatus, double routeId, int goBack, double longitude, double latitude, double speed, double azimuth, Date dataTime, int stopId, String stopLocationName, String routeName, String providerName) {
 
         this.providerId = providerId;
         this.busId = busId;
@@ -45,12 +48,15 @@ public class BusData {
         this.azimuth = azimuth;
         this.dataTime = dataTime;
         this.stopId = stopId;
+        this.stopLocationName = stopLocationName;
+        this.routeName = routeName;
+        this.providerName = providerName;
 
     }
 
     @Override
     public String toString() {
-        String vdDataStr = String.format("%1$s, %2$s, %3$d, %4$.1f, %5$.1f, %6$d, %7$d, %8$.1f, %9$d, %10$.6f, %11$.6f, %12$.1f, %13$.1f, %14$d", busId, this.getTimeStr(), carType, providerId, carId, dutyStatus, busStatus, routeId, goBack, longitude, latitude, speed, azimuth, getStopId());
+        String vdDataStr = String.format("%1$s, %2$d, %3$.1f, %4$s, %5$.1f, %6$s, %7$d, %8$d, %9$.1f, %10$s, %11$d, %12$.6f, %13$.6f, %14$.6f, %15$.6f, %16$d, %17$s", this.getTimeStr(), carType, providerId,providerName, carId, busId, dutyStatus, busStatus, routeId, routeName, goBack, longitude, latitude, speed, azimuth, stopId, stopLocationName);
         return vdDataStr;
     }
 
@@ -163,6 +169,27 @@ public class BusData {
      */
     public void setStopId(int stopId) {
         this.stopId = stopId;
+    }
+
+    /**
+     * @param stopLocationName the stopLocationName to set
+     */
+    public void setStopLocationName(String stopLocationName) {
+        this.stopLocationName = stopLocationName;
+    }
+
+    /**
+     * @param routeName the routeName to set
+     */
+    public void setRouteName(String routeName) {
+        this.routeName = routeName;
+    }
+
+    /**
+     * @param providerName the providerName to set
+     */
+    public void setProviderName(String providerName) {
+        this.providerName = providerName;
     }
 
 }

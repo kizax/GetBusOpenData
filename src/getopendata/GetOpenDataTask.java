@@ -39,16 +39,22 @@ public class GetOpenDataTask extends TimerTask {
 
         try {
             String busDataUrl = "http://data.taipei/bus/BUSDATA";
-            HttpResponse httpResponse = HttpUtil.httpGet(busDataUrl);
+            HttpResponse busDataHttpResponse = HttpUtil.httpGet(busDataUrl);
 
-            String busDataJsonStr = getStrFromResponse(httpResponse);
+            String busDataJsonStr = getStrFromResponse(busDataHttpResponse);
             ArrayList<BusData> tempBusDataList = BusDataJsonParser.getBusDataList(busDataJsonStr);
 
             String busEventDataUrl = "http://data.taipei/bus/BUSEVENT";
-            httpResponse = HttpUtil.httpGet(busEventDataUrl);
+            HttpResponse busEventDataHttpResponse = HttpUtil.httpGet(busEventDataUrl);
 
-            String busEventDataJsonStr = getStrFromResponse(httpResponse);
+            String busEventDataJsonStr = getStrFromResponse(busEventDataHttpResponse);
             ArrayList<BusEventData> busEventDataList = BusDataJsonParser.getBusEventDataList(busEventDataJsonStr);
+
+            String routeDataUrl = "http://data.taipei/bus/ROUTEGeom";
+            HttpResponse routeDataHttpResponse = HttpUtil.httpGet(routeDataUrl);
+
+            String routeDataJsonStr = getStrFromResponse(routeDataHttpResponse);
+            ArrayList<RouteData> routeDataList = BusDataJsonParser.getRouteDataList(routeDataJsonStr);
 
             Map<Double, BusEventData> busEventDataTreeMap = new TreeMap<>(new BusEventDataComparator());
             busEventDataList.stream().forEach((busEventData) -> {
@@ -61,7 +67,7 @@ public class GetOpenDataTask extends TimerTask {
                     BusEventData busEventData = busEventDataTreeMap.get(busData.getCarId());
                     busData.setStopId(busEventData.getStopId());
                     busDataList.add(busData);
-                }else{
+                } else {
                     busDataList.add(busData);
                 }
             }

@@ -1,10 +1,7 @@
 package getopendata;
 
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.Map;
-import java.util.Map.Entry;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
