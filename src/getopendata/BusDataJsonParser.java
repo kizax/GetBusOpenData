@@ -66,7 +66,7 @@ public class BusDataJsonParser {
             }
 
             BusData busData = new BusData(providerId, busId, carType, carId, dutyStatus, busStatus, routeId, goBack, longitude, latitude, speed, azimuth, dataTime, stopId, stopLocationName, routeName, providerName);
-            System.out.println(busData.toString());
+//            System.out.println(busData.toString());
             busDataList.add(busData);
         }
         System.out.println(String.format("%1$s\tNum of bus data rows: %2$d", TimestampUtils.getTimestampStr(), busDataList.size()));
@@ -106,7 +106,7 @@ public class BusDataJsonParser {
             }
 
             BusEventData busEventData = new BusEventData(providerId, busId, carType, carId, dutyStatus, busStatus, routeId, goBack, stopId, carOnStop, dataTime);
-            System.out.println(busEventData.toString());
+//            System.out.println(busEventData.toString());
             busEventDataList.add(busEventData);
         }
         System.out.println(String.format("%1$s\tNum of bus event data rows: %2$d", TimestampUtils.getTimestampStr(), busEventDataList.size()));
@@ -126,7 +126,7 @@ public class BusDataJsonParser {
             String routeName = routeJsonObj.getString("pathAttributeName");
 
             RouteData routeData = new RouteData(routeId, routeName);
-            System.out.println(routeData.toString());
+//            System.out.println(routeData.toString());
             routeDataList.add(routeData);
         }
         System.out.println(String.format("%1$s\tNum of route data rows: %2$d", TimestampUtils.getTimestampStr(), routeDataList.size()));
@@ -142,19 +142,18 @@ public class BusDataJsonParser {
         for (int i = 0; i < stopLocationDataJsonArray.length(); i++) {
             JSONObject stopLocationJsonObj = (JSONObject) stopLocationDataJsonArray.get(i);
 
-            double stopId = (double)stopLocationJsonObj.get("Id");
+            double stopId = (double) stopLocationJsonObj.get("Id");
             String stopLocationName = stopLocationJsonObj.getString("nameZh");
 
             StopLocationData stopLocationData = new StopLocationData(stopId, stopLocationName);
-            System.out.println(stopLocationData.toString());
+//            System.out.println(stopLocationData.toString());
             stopLocationDataList.add(stopLocationData);
         }
-        System.out.println(String.format("%1$s\tNum of route data rows: %2$d", TimestampUtils.getTimestampStr(), stopLocationDataList.size()));
+        System.out.println(String.format("%1$s\tNum of stop location data rows: %2$d", TimestampUtils.getTimestampStr(), stopLocationDataList.size()));
         return stopLocationDataList;
     }
-    
-    
-        public static ArrayList<ProviderData> getProviderDataList(String jsonStr) throws SAXException, IOException, ParseException, ParserConfigurationException, JSONException {
+
+    public static ArrayList<ProviderData> getProviderDataList(String jsonStr) throws SAXException, IOException, ParseException, ParserConfigurationException, JSONException {
 
         ArrayList<ProviderData> providerDataList = new ArrayList<>();
 
@@ -167,10 +166,10 @@ public class BusDataJsonParser {
             String stopLocationName = stopLocationJsonObj.getString("nameZn");
 
             ProviderData providerData = new ProviderData(stopId, stopLocationName);
-            System.out.println(providerData.toString());
+//            System.out.println(providerData.toString());
             providerDataList.add(providerData);
         }
-        System.out.println(String.format("%1$s\tNum of route data rows: %2$d", TimestampUtils.getTimestampStr(), providerDataList.size()));
+        System.out.println(String.format("%1$s\tNum of provider data rows: %2$d", TimestampUtils.getTimestampStr(), providerDataList.size()));
         return providerDataList;
     }
 

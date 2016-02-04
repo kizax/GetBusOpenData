@@ -9,14 +9,14 @@ public class OpenDataRegularDownloader {
 
     public static void main(String[] args) throws ParserConfigurationException {
 
-        int timeInterval = 1 * 60 * 1000; //in millissecond
+        int timeInterval = 10*1000; //in millissecond
 
         Date date = new Date();
         Timer timer = new Timer();
 
         System.out.println(String.format("%1$s\tIf you want to stop timer, press 12345.", TimestampUtils.getTimestampStr()));
         System.out.println(String.format("%1$s\tStart bus open data regular downloader!", TimestampUtils.getTimestampStr()));
-        timer.schedule(new GetOpenDataTask(), date, timeInterval);
+        timer.scheduleAtFixedRate(new GetOpenDataTask(), date, timeInterval);
 
         while(true){
             Scanner scanner = new Scanner(System.in);

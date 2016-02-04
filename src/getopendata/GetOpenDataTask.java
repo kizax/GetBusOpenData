@@ -43,7 +43,7 @@ public class GetOpenDataTask extends TimerTask {
             HttpResponse busDataHttpResponse = HttpUtils.httpGet(busDataUrl);
 
             String busDataJsonStr = getStrFromResponse(busDataHttpResponse);
-            ArrayList<BusData> tempBusDataList = BusDataJsonParser.getBusDataList(busDataJsonStr);
+            ArrayList<BusData> busDataList = BusDataJsonParser.getBusDataList(busDataJsonStr);
 
             String busEventDataUrl = "http://data.taipei/bus/BUSEVENT";
             String routeDataUrl = "http://data.taipei/bus/ROUTE";
@@ -73,17 +73,17 @@ public class GetOpenDataTask extends TimerTask {
                 busEventDataTreeMap.put(busEventData.getCarId(), busEventData);
             });
 
-            ArrayList<BusData> busDataList = new ArrayList<>(tempBusDataList);
-            for (BusData busData : tempBusDataList) {
+            ArrayList<BusData> tempBusDataList = new ArrayList<>();
+            for (BusData busData : busDataList) {
                 if (busEventDataTreeMap.containsKey(busData.getCarId())) {
                     BusEventData busEventData = busEventDataTreeMap.get(busData.getCarId());
                     busData.setStopId(busEventData.getStopId());
-                    busDataList.add(busData);
+                    tempBusDataList.add(busData);
                 } else {
-                    busDataList.add(busData);
+                    tempBusDataList.add(busData);
                 }
             }
-            tempBusDataList = new ArrayList<>(busDataList);
+            busDataList = new ArrayList<>(tempBusDataList);
 
             //塞入stopLocationName
             Map<Double, StopLocationData> stopLocationDataTreeMap = new TreeMap<>(new DoubleComparator());
@@ -91,17 +91,17 @@ public class GetOpenDataTask extends TimerTask {
                 stopLocationDataTreeMap.put(stopLocationData.getStopId(), stopLocationData);
             });
 
-            busDataList = new ArrayList<>(tempBusDataList);
-            for (BusData busData : tempBusDataList) {
+            tempBusDataList = new ArrayList<>();
+            for (BusData busData : busDataList) {
                 if (stopLocationDataTreeMap.containsKey((double) busData.getStopId())) {
                     StopLocationData stopLocationData = stopLocationDataTreeMap.get((double) busData.getStopId());
                     busData.setStopLocationName(stopLocationData.getStopLocationName());
-                    busDataList.add(busData);
+                    tempBusDataList.add(busData);
                 } else {
-                    busDataList.add(busData);
+                    tempBusDataList.add(busData);
                 }
             }
-            tempBusDataList = new ArrayList<>(busDataList);
+            busDataList = new ArrayList<>(tempBusDataList);
 
             //塞入routeName
             Map<Double, RouteData> routeDataTreeMap = new TreeMap<>(new DoubleComparator());
@@ -109,17 +109,17 @@ public class GetOpenDataTask extends TimerTask {
                 routeDataTreeMap.put(routeData.getRouteId(), routeData);
             });
 
-            busDataList = new ArrayList<>(tempBusDataList);
-            for (BusData busData : tempBusDataList) {
+            tempBusDataList = new ArrayList<>();
+            for (BusData busData : busDataList) {
                 if (routeDataTreeMap.containsKey(busData.getRouteId())) {
                     RouteData routeData = routeDataTreeMap.get(busData.getRouteId());
                     busData.setRouteName(routeData.getRouteName());
-                    busDataList.add(busData);
+                    tempBusDataList.add(busData);
                 } else {
-                    busDataList.add(busData);
+                    tempBusDataList.add(busData);
                 }
             }
-            tempBusDataList = new ArrayList<>(busDataList);
+            busDataList = new ArrayList<>(tempBusDataList);
 
             //塞入providerName
             Map<Double, ProviderData> providerDataTreeMap = new TreeMap<>(new DoubleComparator());
@@ -127,17 +127,17 @@ public class GetOpenDataTask extends TimerTask {
                 providerDataTreeMap.put(providerData.getProviderId(), providerData);
             });
 
-            busDataList = new ArrayList<>(tempBusDataList);
-            for (BusData busData : tempBusDataList) {
+            tempBusDataList = new ArrayList<>();
+            for (BusData busData : busDataList) {
                 if (providerDataTreeMap.containsKey(busData.getProviderId())) {
                     ProviderData providerData = providerDataTreeMap.get(busData.getProviderId());
                     busData.setProviderName(providerData.getProviderName());
-                    busDataList.add(busData);
+                    tempBusDataList.add(busData);
                 } else {
-                    busDataList.add(busData);
+                    tempBusDataList.add(busData);
                 }
             }
-            tempBusDataList = new ArrayList<>(busDataList);
+            busDataList = new ArrayList<>(tempBusDataList);
 
             SimpleDateFormat fileTimestampFormat = new SimpleDateFormat("_yyyy-MM-dd");
             String fileTimestamp = fileTimestampFormat.format(new Date());
@@ -162,7 +162,7 @@ public class GetOpenDataTask extends TimerTask {
             BusDataDaoImpl busDataDaoImpl = new BusDataDaoImpl();
 
             for (BusData busData : busDataList) {
-                writeCsvFile(csvFileWriter, busData.toString());
+//                writeCsvFile(csvFileWriter, busData.toString());
                 busDataDaoImpl.add(busData);
             }
 
