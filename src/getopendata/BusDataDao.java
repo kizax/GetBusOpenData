@@ -6,6 +6,7 @@
 package getopendata;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -13,6 +14,6 @@ import java.sql.SQLException;
  */
 public interface BusDataDao {
 
-    public void add(BusData busData) throws SQLException;
+    public void add(ArrayList<BusData> busDataList) throws SQLException;
 
 }

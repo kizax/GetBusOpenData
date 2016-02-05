@@ -161,11 +161,8 @@ public class GetOpenDataTask extends TimerTask {
 
             BusDataDaoImpl busDataDaoImpl = new BusDataDaoImpl();
 
-            for (BusData busData : busDataList) {
-//                writeCsvFile(csvFileWriter, busData.toString());
-                busDataDaoImpl.add(busData);
-//                writeDb(busDataDaoImpl, busData);
-            }
+
+                busDataDaoImpl.add(busDataList);
 
             System.out.println(String.format("%1$s\tSuccessfully writing data into busdb", TimestampUtils.getTimestampStr()));
 
@@ -181,17 +178,12 @@ public class GetOpenDataTask extends TimerTask {
             Logger.getLogger(GetOpenDataTask.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(GetOpenDataTask.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
 
     }
 
     private void writeCsvFile(FileWriter csvFileWriter, String record) {
         WriteCsvThread writerThread = new WriteCsvThread(csvFileWriter, record);
-        writerThread.start();
-    }
-
-    private void writeDb(BusDataDaoImpl busDataDaoImpl, BusData busData) {
-        WriteDbThread writerThread = new WriteDbThread(busData);
         writerThread.start();
     }
 
