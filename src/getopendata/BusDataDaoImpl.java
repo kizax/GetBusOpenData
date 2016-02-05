@@ -19,7 +19,7 @@ public class BusDataDaoImpl implements BusDataDao {
     public void add(BusData busData) throws SQLException {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
-        String sql = "INSERT INTO busdata VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO busdata (datatime,cartype,providerid,providername,carid,busid,dutystatus,busstatus,routeid,routename,goback,longitude,latitude,speed,azimuth,stopid,stopLocationName) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
             conn = DbUtils.getConnection();
             preparedStatement = conn.prepareStatement(sql);

@@ -139,10 +139,10 @@ public class GetOpenDataTask extends TimerTask {
             }
             busDataList = new ArrayList<>(tempBusDataList);
 
-            SimpleDateFormat fileTimestampFormat = new SimpleDateFormat("_yyyy-MM-dd");
+            SimpleDateFormat fileTimestampFormat = new SimpleDateFormat("_yyyy-MM-dd_HH00");
             String fileTimestamp = fileTimestampFormat.format(new Date());
             String csvFileName = String.format("./record/busdata%1$s.csv", fileTimestamp);
-            System.out.println(String.format("%1$s\tNow start writing data into csv file <%2$s>", TimestampUtils.getTimestampStr(), csvFileName));
+            System.out.println(String.format("%1$s\tNow start writing data into db", TimestampUtils.getTimestampStr()));
 
             File csvDataFile = new File(csvFileName);
 
@@ -164,9 +164,10 @@ public class GetOpenDataTask extends TimerTask {
             for (BusData busData : busDataList) {
 //                writeCsvFile(csvFileWriter, busData.toString());
                 busDataDaoImpl.add(busData);
+//                writeDb(busDataDaoImpl, busData);
             }
 
-            System.out.println(String.format("%1$s\tSuccessfully writing data into csv file <%2$s>", TimestampUtils.getTimestampStr(), csvFileName));
+            System.out.println(String.format("%1$s\tSuccessfully writing data into busdb", TimestampUtils.getTimestampStr()));
 
         } catch (IOException ex) {
             Logger.getLogger(OpenDataRegularDownloader.class.getName()).log(Level.SEVERE, null, ex);
@@ -180,12 +181,17 @@ public class GetOpenDataTask extends TimerTask {
             Logger.getLogger(GetOpenDataTask.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(GetOpenDataTask.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
 
     }
 
     private void writeCsvFile(FileWriter csvFileWriter, String record) {
-        WriterThread writerThread = new WriterThread(csvFileWriter, record);
+        WriteCsvThread writerThread = new WriteCsvThread(csvFileWriter, record);
+        writerThread.start();
+    }
+
+    private void writeDb(BusDataDaoImpl busDataDaoImpl, BusData busData) {
+        WriteDbThread writerThread = new WriteDbThread(busData);
         writerThread.start();
     }
 

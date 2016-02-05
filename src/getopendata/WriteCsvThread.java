@@ -12,12 +12,12 @@ package getopendata;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class WriterThread extends Thread {
+public class WriteCsvThread extends Thread {
 
     private final String record;
     private final FileWriter txtFileWriter;
 
-    public WriterThread(FileWriter fileWriter, String record) {
+    public WriteCsvThread(FileWriter fileWriter, String record) {
         this.txtFileWriter = fileWriter;
         this.record = record;
     }
