@@ -11,3 +11,6 @@ SELECT * FROM busdb.busdata WHERE datatime >= '2016-02-10 13:58:00' AND datatime
 查詢349-FP的公車資料
 使用'='查詢
 SELECT * FROM busdb.busdata WHERE datatime >= '2016-02-10 13:58:00' AND datatime < '2016-02-10 13:59:00' AND busid = '349-FP';
+
+這時候發現字串比對比較慢，建議以與busid相對應的carid來做查詢，會節省一點時間
+SELECT * FROM busdb.busdata WHERE datatime >= '2016-02-10 13:58:00' AND datatime < '2016-02-10 13:59:00' AND carid = '222233749';
