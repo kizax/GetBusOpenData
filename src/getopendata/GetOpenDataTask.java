@@ -161,15 +161,6 @@ public class GetOpenDataTask extends TimerTask {
                 csvDataFile.getParentFile().mkdirs();
             }
 
-            FileWriter csvFileWriter;
-            if (!csvDataFile.exists()) {
-                csvDataFile.createNewFile();
-                csvFileWriter = new FileWriter(csvDataFile, true);
-                writeCsvFile(csvFileWriter, " DataTime,  CarType, ProviderID, ProviderName, CarID, BusId, DutyStatus, BusStatus, RouteID, RouteName,  GoBack, Longitude,  Latitude, Speed, Azimuth, StopID, StopLocationName");
-            } else {
-                csvFileWriter = new FileWriter(csvDataFile, true);
-            }
-
             BusDataDaoImpl busDataDaoImpl = new BusDataDaoImpl();
 
             busDataDaoImpl.add(busDataList);
