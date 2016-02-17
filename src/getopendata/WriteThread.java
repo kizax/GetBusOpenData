@@ -12,13 +12,13 @@ package getopendata;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class WriteCsvThread extends Thread {
+public class WriteThread extends Thread {
 
     private final String record;
-    private final FileWriter txtFileWriter;
+    private final FileWriter fileWriter;
 
-    public WriteCsvThread(FileWriter fileWriter, String record) {
-        this.txtFileWriter = fileWriter;
+    public WriteThread(FileWriter fileWriter, String record) {
+        this.fileWriter = fileWriter;
         this.record = record;
     }
 
@@ -27,9 +27,9 @@ public class WriteCsvThread extends Thread {
         super.run();
         try {
 
-            synchronized (txtFileWriter) {
-                txtFileWriter.write(record + "\n");
-                txtFileWriter.flush();
+            synchronized (fileWriter) {
+                fileWriter.write(record + "\n");
+                fileWriter.flush();
             }
         } catch (IOException e) {
             e.printStackTrace();

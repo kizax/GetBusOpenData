@@ -66,10 +66,9 @@ public class BusDataJsonParser {
             }
 
             BusData busData = new BusData(providerId, busId, carType, carId, dutyStatus, busStatus, routeId, goBack, longitude, latitude, speed, azimuth, dataTime, stopId, stopLocationName, routeName, providerName);
-//            System.out.println(busData.toString());
             busDataList.add(busData);
         }
-        System.out.println(String.format("%1$s\tNum of bus data rows: %2$d", TimestampUtils.getTimestampStr(), busDataList.size()));
+      
 
         return busDataList;
     }
@@ -106,10 +105,8 @@ public class BusDataJsonParser {
             }
 
             BusEventData busEventData = new BusEventData(providerId, busId, carType, carId, dutyStatus, busStatus, routeId, goBack, stopId, carOnStop, dataTime);
-//            System.out.println(busEventData.toString());
             busEventDataList.add(busEventData);
         }
-        System.out.println(String.format("%1$s\tNum of bus event data rows: %2$d", TimestampUtils.getTimestampStr(), busEventDataList.size()));
         return busEventDataList;
     }
 
@@ -126,10 +123,10 @@ public class BusDataJsonParser {
             String routeName = routeJsonObj.getString("pathAttributeName");
 
             RouteData routeData = new RouteData(routeId, routeName);
-//            System.out.println(routeData.toString());
+
             routeDataList.add(routeData);
         }
-        System.out.println(String.format("%1$s\tNum of route data rows: %2$d", TimestampUtils.getTimestampStr(), routeDataList.size()));
+
         return routeDataList;
     }
 
@@ -146,10 +143,10 @@ public class BusDataJsonParser {
             String stopLocationName = stopLocationJsonObj.getString("nameZh");
 
             StopLocationData stopLocationData = new StopLocationData(stopId, stopLocationName);
-//            System.out.println(stopLocationData.toString());
+
             stopLocationDataList.add(stopLocationData);
         }
-        System.out.println(String.format("%1$s\tNum of stop location data rows: %2$d", TimestampUtils.getTimestampStr(), stopLocationDataList.size()));
+
         return stopLocationDataList;
     }
 
@@ -166,10 +163,10 @@ public class BusDataJsonParser {
             String stopLocationName = stopLocationJsonObj.getString("nameZn");
 
             ProviderData providerData = new ProviderData(stopId, stopLocationName);
-//            System.out.println(providerData.toString());
+
             providerDataList.add(providerData);
         }
-        System.out.println(String.format("%1$s\tNum of provider data rows: %2$d", TimestampUtils.getTimestampStr(), providerDataList.size()));
+
         return providerDataList;
     }
 

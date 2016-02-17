@@ -54,9 +54,11 @@ public class BusDataDaoImpl implements BusDataDao {
                 preparedStatement.setInt(i * 17 + 16, busData.getStopId());
                 preparedStatement.setString(i * 17 + 17, busData.getStopLocationName());
             }
-            preparedStatement.executeUpdate();
 
-            preparedStatement.executeUpdate();
+            if (busDataList.size() > 0) {
+                preparedStatement.executeUpdate();
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
             throw new SQLException("Insertion fail");

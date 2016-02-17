@@ -22,6 +22,7 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
+import javafx.scene.control.TextArea;
 import javax.xml.parsers.ParserConfigurationException;
 import org.apache.http.HttpResponse;
 import org.json.JSONException;
@@ -33,10 +34,18 @@ import org.xml.sax.SAXException;
  */
 public class GetOpenDataTask extends TimerTask {
 
+    private final TextArea logTextArea;
+    private final FileWriter logFileWriter;
+
+    public GetOpenDataTask(FileWriter logFileWriter, TextArea logTextArea) {
+        this.logTextArea = logTextArea;
+        this.logFileWriter = logFileWriter;
+    }
+
     @Override
     public void run() {
 
-        System.out.println(String.format("%1$s\tBus data is downloading now.", TimestampUtils.getTimestampStr()));
+        LogUtils.log(logFileWriter, logTextArea, String.format("%1$s\tBus data is downloading now.", TimestampUtils.getTimestampStr()));
 
         try {
             String busDataUrl = "http://data.taipei/bus/BUSDATA";
@@ -139,10 +148,12 @@ public class GetOpenDataTask extends TimerTask {
             }
             busDataList = new ArrayList<>(tempBusDataList);
 
+            LogUtils.log(logFileWriter, logTextArea, String.format("%1$s\tNum of bus data: %2$d", TimestampUtils.getTimestampStr(), busDataList.size()));
+
             SimpleDateFormat fileTimestampFormat = new SimpleDateFormat("_yyyy-MM-dd_HH00");
             String fileTimestamp = fileTimestampFormat.format(new Date());
             String csvFileName = String.format("./record/busdata%1$s.csv", fileTimestamp);
-            System.out.println(String.format("%1$s\tNow start writing data into db", TimestampUtils.getTimestampStr()));
+            LogUtils.log(logFileWriter, logTextArea, String.format("%1$s\tNow start writing data into db", TimestampUtils.getTimestampStr()));
 
             File csvDataFile = new File(csvFileName);
 
@@ -161,10 +172,9 @@ public class GetOpenDataTask extends TimerTask {
 
             BusDataDaoImpl busDataDaoImpl = new BusDataDaoImpl();
 
+            busDataDaoImpl.add(busDataList);
 
-                busDataDaoImpl.add(busDataList);
-
-            System.out.println(String.format("%1$s\tSuccessfully writing data into busdb", TimestampUtils.getTimestampStr()));
+            LogUtils.log(logFileWriter, logTextArea, String.format("%1$s\tSuccessfully writing data into busdb", TimestampUtils.getTimestampStr()));
 
         } catch (IOException ex) {
             Logger.getLogger(OpenDataRegularDownloader.class.getName()).log(Level.SEVERE, null, ex);
@@ -183,7 +193,7 @@ public class GetOpenDataTask extends TimerTask {
     }
 
     private void writeCsvFile(FileWriter csvFileWriter, String record) {
-        WriteCsvThread writerThread = new WriteCsvThread(csvFileWriter, record);
+        WriteThread writerThread = new WriteThread(csvFileWriter, record);
         writerThread.start();
     }
 

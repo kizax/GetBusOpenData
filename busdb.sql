@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS busdata;
 
 CREATE TABLE busdata (
   ID int NOT NULL AUTO_INCREMENT,
-  datatime VARCHAR(20),
+  datatime datetime,
   cartype INT,
   providerid float(10,1),
   providername VARCHAR(10),
