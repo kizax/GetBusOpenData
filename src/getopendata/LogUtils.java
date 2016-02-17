@@ -6,6 +6,7 @@
 package getopendata;
 
 import java.io.FileWriter;
+import javafx.application.Platform;
 import javafx.scene.control.TextArea;
 
 /**
@@ -15,10 +16,12 @@ import javafx.scene.control.TextArea;
 public class LogUtils {
 
     public static void log(FileWriter logFileWriter, TextArea logTextArea, String logStr) {
-        logTextArea.appendText(logStr+"\n");
+        Platform.runLater(() -> {
+            logTextArea.appendText(logStr + "\n");
+        });
+
         WriteThread writerThread = new WriteThread(logFileWriter, logStr);
         writerThread.start();
     }
-
 
 }
