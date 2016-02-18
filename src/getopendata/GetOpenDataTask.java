@@ -169,16 +169,22 @@ public class GetOpenDataTask extends TimerTask {
 
         } catch (IOException ex) {
             Logger.getLogger(OpenDataRegularDownloader.class.getName()).log(Level.SEVERE, null, ex);
+            LogUtils.log(logFileWriter, logTextArea, String.format("%1$s\t%2$s", TimestampUtils.getTimestampStr(), ex));
         } catch (SAXException ex) {
             Logger.getLogger(OpenDataRegularDownloader.class.getName()).log(Level.SEVERE, null, ex);
+            LogUtils.log(logFileWriter, logTextArea, String.format("%1$s\t%2$s", TimestampUtils.getTimestampStr(), ex));
         } catch (ParseException ex) {
             Logger.getLogger(OpenDataRegularDownloader.class.getName()).log(Level.SEVERE, null, ex);
+            LogUtils.log(logFileWriter, logTextArea, String.format("%1$s\t%2$s", TimestampUtils.getTimestampStr(), ex));
         } catch (ParserConfigurationException ex) {
             Logger.getLogger(GetOpenDataTask.class.getName()).log(Level.SEVERE, null, ex);
+            LogUtils.log(logFileWriter, logTextArea, String.format("%1$s\t%2$s", TimestampUtils.getTimestampStr(), ex));
         } catch (JSONException ex) {
             Logger.getLogger(GetOpenDataTask.class.getName()).log(Level.SEVERE, null, ex);
+            LogUtils.log(logFileWriter, logTextArea, String.format("%1$s\t%2$s", TimestampUtils.getTimestampStr(), ex));
         } catch (SQLException ex) {
             Logger.getLogger(GetOpenDataTask.class.getName()).log(Level.SEVERE, null, ex);
+            LogUtils.log(logFileWriter, logTextArea, String.format("%1$s\t%2$s", TimestampUtils.getTimestampStr(), ex));
         }
 
     }
