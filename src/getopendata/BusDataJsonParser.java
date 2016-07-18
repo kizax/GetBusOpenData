@@ -6,7 +6,9 @@
 package getopendata;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,37 +35,41 @@ public class BusDataJsonParser {
         for (int i = 0; i < busInfoJsonArray.length(); i++) {
             JSONObject busJsonObj = (JSONObject) busInfoJsonArray.get(i);
 
-            double providerId = (Double) busJsonObj.get("ProviderID");
+            int tempProviderID = (Integer)busJsonObj.get("ProviderID");
+            double providerId = (double) tempProviderID;
             String busId = busJsonObj.getString("BusID");
             int carType = busJsonObj.getInt("CarType");
-            double carId = (Double) busJsonObj.get("CarID");
+            int tempCarID = (Integer)busJsonObj.get("CarID");
+            double carId = (double) tempCarID;
             int dutyStatus = busJsonObj.getInt("DutyStatus");
 
             String tempStr = (String) busJsonObj.get("BusStatus");
             int busStatus = (tempStr == null ? 0 : tempStr.trim().isEmpty() ? 0 : Integer.parseInt(tempStr));
 
-            double routeId = (Double) busJsonObj.get("RouteID");
+            String tempRouteId = (String) busJsonObj.get("RouteID");
+            double routeId = (double) Double.parseDouble(tempRouteId);
             int goBack = busJsonObj.getInt("GoBack");
-            double longitude = (Double) busJsonObj.get("Longitude");
-            double latitude = (Double) busJsonObj.get("Latitude");
-            double speed = (Double) busJsonObj.get("Speed");
-            double azimuth = (Double) busJsonObj.get("Azimuth");
+            
+            String tempLongitude = (String) busJsonObj.get("Longitude");
+            double longitude =  (double) Double.parseDouble(tempLongitude);
+            
+            String tempLatitude = (String) busJsonObj.get("Latitude");
+            double latitude = (Double) (double) Double.parseDouble(tempLatitude);
+            
+            String tempSpeed = (String) busJsonObj.get("Speed");
+            double speed = (Double) (double) Double.parseDouble(tempSpeed);
+            
+            String tempAzimuth = (String) busJsonObj.get("Azimuth");
+            double azimuth = (Double) Double.parseDouble(tempAzimuth);
 
             int stopId = 0;
             String stopLocationName = "";
             String routeName = "";
             String providerName = "";
 
-            Date dataTime = null;
-            String dataTimeStr = busJsonObj.getString("DataTime");
-            Pattern pattern = Pattern.compile("(\\d){13}");
-            Matcher matcher = pattern.matcher(dataTimeStr);
-            if (matcher.find()) {
-                long dateTimeLong = Long.parseLong(matcher.group(0));
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(dateTimeLong);
-                dataTime = calendar.getTime();
-            }
+            String dataTimeStr = (String)busJsonObj.getString("DataTime");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date dataTime =  df.parse(dataTimeStr);  
 
             BusData busData = new BusData(providerId, busId, carType, carId, dutyStatus, busStatus, routeId, goBack, longitude, latitude, speed, azimuth, dataTime, stopId, stopLocationName, routeName, providerName);
             busDataList.add(busData);
@@ -82,13 +88,21 @@ public class BusDataJsonParser {
         for (int i = 0; i < busInfoJsonArray.length(); i++) {
             JSONObject busJsonObj = (JSONObject) busInfoJsonArray.get(i);
 
-            double providerId = (Double) busJsonObj.get("ProviderID");
+            int tempProviderID = (Integer)busJsonObj.get("ProviderID");
+            double providerId = (double) tempProviderID;
+            
             String busId = busJsonObj.getString("BusID");
             int carType = busJsonObj.getInt("CarType");
-            double carId = (Double) busJsonObj.get("CarID");
+            
+            int tempCarID = (Integer)busJsonObj.get("CarID");
+            double carId = (double) tempCarID;
+            
             int dutyStatus = busJsonObj.getInt("DutyStatus");
             int busStatus = busJsonObj.getInt("BusStatus");
-            double routeId = (Double) busJsonObj.get("RouteID");
+            
+            String tempRouteId = (String) busJsonObj.get("RouteID");
+            double routeId = (double) Double.parseDouble(tempRouteId);
+            
             int goBack = busJsonObj.getInt("GoBack");
             int stopId = busJsonObj.getInt("StopID");
             int carOnStop = busJsonObj.getInt("CarOnStop");
@@ -139,7 +153,8 @@ public class BusDataJsonParser {
         for (int i = 0; i < stopLocationDataJsonArray.length(); i++) {
             JSONObject stopLocationJsonObj = (JSONObject) stopLocationDataJsonArray.get(i);
 
-            double stopId = (double) stopLocationJsonObj.get("Id");
+            int tempStopId = (Integer) stopLocationJsonObj.get("Id");
+            double stopId = (double)tempStopId;
             String stopLocationName = stopLocationJsonObj.getString("nameZh");
 
             StopLocationData stopLocationData = new StopLocationData(stopId, stopLocationName);
@@ -159,7 +174,8 @@ public class BusDataJsonParser {
         for (int i = 0; i < providerDataJsonArray.length(); i++) {
             JSONObject stopLocationJsonObj = (JSONObject) providerDataJsonArray.get(i);
 
-            double stopId = (double) stopLocationJsonObj.get("id");
+            int tempStopId = (Integer) stopLocationJsonObj.get("id");
+            double stopId = (double)tempStopId;
             String stopLocationName = stopLocationJsonObj.getString("nameZn");
 
             ProviderData providerData = new ProviderData(stopId, stopLocationName);
