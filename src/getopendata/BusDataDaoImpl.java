@@ -7,8 +7,12 @@ package getopendata;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -65,6 +69,54 @@ public class BusDataDaoImpl implements BusDataDao {
         } finally {
             DbUtils.close(null, preparedStatement, conn);
         }
+    }
+
+    @Override
+    public BusData getLatestBusData(int carid) {
+        Connection conn = null;
+        PreparedStatement preparedStatement = null;
+        String sql = "SELECT * FROM busdb.busdata where carid = ? order by datatime DESC Limit 1";
+
+        BusData busData = null;
+        try {
+
+            conn = DbUtils.getConnection();
+            preparedStatement = conn.prepareStatement(sql);
+
+            preparedStatement.setInt(1, carid);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                double providerId = (double) resultSet.getFloat("providerid");
+                String busId = resultSet.getString("busid");
+                int carType = resultSet.getInt("cartype");
+                double carId = (double) resultSet.getInt("carid");
+                int dutyStatus = resultSet.getInt("dutystatus");
+                int busStatus = resultSet.getInt("busstatus");
+                double routeId = (double) resultSet.getFloat("routeid");
+                int goBack = resultSet.getInt("goback");
+                double longitude = (double) resultSet.getFloat("longitude");
+                double latitude = (double) resultSet.getFloat("latitude");
+                double speed = (double) resultSet.getFloat("speed");
+                double azimuth = (double) resultSet.getFloat("azimuth");
+                Date dataTime = new Date(resultSet.getTimestamp("datatime").getTime());
+                int stopId = resultSet.getInt("stopid");
+                String stopLocationName = resultSet.getString("stopLocationName");
+                String routeName = resultSet.getString("routename");
+                String providerName = resultSet.getString("providername");
+
+                busData = new BusData(providerId, busId, carType, carId, dutyStatus, busStatus, routeId, goBack, longitude, latitude, speed, azimuth, dataTime, stopId, stopLocationName, routeName, providerName);
+                break;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BusDataDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.close(null, preparedStatement, conn);
+        }
+
+        return busData;
+
     }
 
 }

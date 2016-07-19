@@ -16,4 +16,5 @@ public interface BusDataDao {
 
     public void add(ArrayList<BusData> busDataList) throws SQLException;
 
+    public BusData getLatestBusData(int carid);
 }

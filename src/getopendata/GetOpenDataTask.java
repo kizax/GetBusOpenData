@@ -161,9 +161,32 @@ public class GetOpenDataTask extends TimerTask {
                 csvDataFile.getParentFile().mkdirs();
             }
 
-            BusDataDaoImpl busDataDaoImpl = new BusDataDaoImpl();
+            BusDataDao busDataDaoImpl = new BusDataDaoImpl();
 
-            busDataDaoImpl.add(busDataList);
+            // 先比對資料庫內的資料看看是否有更新
+            ArrayList<BusData> needUpdatedBusDataList = new ArrayList<>();
+
+            for (BusData busData : busDataList) {
+                BusData latestBusData = busDataDaoImpl.getLatestBusData((int) busData.getCarId());
+                if (null == latestBusData) {
+                    needUpdatedBusDataList.add(busData);
+                    continue;
+                }
+
+                double longitudeDiff = latestBusData.getLongitude() - busData.getLongitude();
+                double latitudeDiff = latestBusData.getLatitude() - busData.getLatitude();
+
+                if ((Math.abs(longitudeDiff) >= 0.000002) || (Math.abs(latitudeDiff) >= 0.000002)) {
+                    needUpdatedBusDataList.add(busData);
+                } else {
+                    System.out.println(String.format("latestBusData %1$10.0f: %2$5.10f %3$5.10f, busData %4$10.0f: %5$5.10f %6$5.10f",
+                            latestBusData.getCarId(), latestBusData.getLongitude(), latestBusData.getLatitude(), busData.getCarId(), busData.getLongitude(), busData.getLatitude()));
+                }
+
+            }
+
+            LogUtils.log(logFileWriter, logTextArea, String.format("%1$s\t%2$d bus data need to be updated", TimestampUtils.getTimestampStr(), needUpdatedBusDataList.size()));
+            busDataDaoImpl.add(needUpdatedBusDataList);
 
             LogUtils.log(logFileWriter, logTextArea, String.format("%1$s\tSuccessfully writing data into busdb", TimestampUtils.getTimestampStr()));
 
