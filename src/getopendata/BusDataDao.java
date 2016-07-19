@@ -7,6 +7,7 @@ package getopendata;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 /**
  *
@@ -16,5 +17,5 @@ public interface BusDataDao {
 
     public void add(ArrayList<BusData> busDataList) throws SQLException;
 
-    public BusData getLatestBusData(int carid);
+    public TreeMap<Integer, BusData> getLatestBusDataMap();
 }

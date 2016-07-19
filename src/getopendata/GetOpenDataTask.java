@@ -165,9 +165,12 @@ public class GetOpenDataTask extends TimerTask {
 
             // 先比對資料庫內的資料看看是否有更新
             ArrayList<BusData> needUpdatedBusDataList = new ArrayList<>();
-
+            TreeMap<Integer, BusData> latestBusDataMap = busDataDaoImpl.getLatestBusDataMap();
+            
+            LogUtils.log(logFileWriter, logTextArea, String.format("%1$s\tNow start checking data", TimestampUtils.getTimestampStr()));
             for (BusData busData : busDataList) {
-                BusData latestBusData = busDataDaoImpl.getLatestBusData((int) busData.getCarId());
+
+                BusData latestBusData = latestBusDataMap.get((int)busData.getCarId());
                 if (null == latestBusData) {
                     needUpdatedBusDataList.add(busData);
                     continue;
@@ -178,10 +181,11 @@ public class GetOpenDataTask extends TimerTask {
 
                 if ((Math.abs(longitudeDiff) >= 0.000002) || (Math.abs(latitudeDiff) >= 0.000002)) {
                     needUpdatedBusDataList.add(busData);
-                } else {
-                    System.out.println(String.format("latestBusData %1$10.0f: %2$5.10f %3$5.10f, busData %4$10.0f: %5$5.10f %6$5.10f",
-                            latestBusData.getCarId(), latestBusData.getLongitude(), latestBusData.getLatitude(), busData.getCarId(), busData.getLongitude(), busData.getLatitude()));
-                }
+                } 
+//                else {
+//                    System.out.println(String.format("latestBusData %1$10.0f: %2$5.10f %3$5.10f, busData %4$10.0f: %5$5.10f %6$5.10f",
+//                            latestBusData.getCarId(), latestBusData.getLongitude(), latestBusData.getLatitude(), busData.getCarId(), busData.getLongitude(), busData.getLatitude()));
+//                }
 
             }
 

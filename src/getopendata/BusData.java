@@ -22,8 +22,8 @@ public class BusData {
     private final int busStatus;
     private final double routeId;
     private final int goBack;
-    private final double longitude;
-    private final double latitude;
+    private double longitude;
+    private double latitude;
     private final double speed;
     private final double azimuth;
     private final Date dataTime;
@@ -54,9 +54,29 @@ public class BusData {
 
     }
 
+    BusData() {
+        this.providerId = 0.0;
+        this.busId = null;
+        this.carType = 0;
+        this.carId = 0;
+        this.dutyStatus = 0;
+        this.busStatus = 0;
+        this.routeId = 0;
+        this.goBack = 0;
+        this.longitude = 0;
+        this.latitude = 0;
+        this.speed = 0;
+        this.azimuth = 0;
+        this.dataTime = null;
+        this.stopId = 0;
+        this.stopLocationName = null;
+        this.routeName = null;
+        this.providerName = null;
+    }
+
     @Override
     public String toString() {
-        String vdDataStr = String.format("%1$s, %2$d, %3$.1f, %4$s, %5$.1f, %6$s, %7$d, %8$d, %9$.1f, %10$s, %11$d, %12$.6f, %13$.6f, %14$.6f, %15$.6f, %16$d, %17$s", this.getTimeStr(), carType, providerId, getProviderName(), carId, busId, dutyStatus, busStatus, routeId, getRouteName(), goBack, longitude, latitude, speed, azimuth, stopId, getStopLocationName());
+        String vdDataStr = String.format("%1$s, %2$d, %3$.1f, %4$s, %5$.1f, %6$s, %7$d, %8$d, %9$.1f, %10$s, %11$d, %12$.6f, %13$.6f, %14$.6f, %15$.6f, %16$d, %17$s", this.getTimeStr(), carType, providerId, getProviderName(), carId, busId, dutyStatus, busStatus, routeId, getRouteName(), goBack, getLongitude(), getLatitude(), speed, azimuth, stopId, getStopLocationName());
         return vdDataStr;
     }
 
@@ -211,6 +231,20 @@ public class BusData {
      */
     public String getProviderName() {
         return providerName;
+    }
+
+    /**
+     * @param longitude the longitude to set
+     */
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    /**
+     * @param latitude the latitude to set
+     */
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
 }
