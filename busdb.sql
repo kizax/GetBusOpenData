@@ -21,10 +21,10 @@ CREATE TABLE busdata (
   routename VARCHAR(25),
 
   goback INT,
-  longitude float(15,6),
-  latitude float(15,6),
-  speed float(15,6),
-  azimuth float(15,6),
+  longitude DECIMAL(10,6),
+  latitude DECIMAL(10,6),
+  speed DECIMAL(10,6),
+  azimuth DECIMAL(10,6),
   
   stopid INT,
   stopLocationName VARCHAR(30),
