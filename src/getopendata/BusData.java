@@ -17,7 +17,7 @@ public class BusData {
     private final double providerId;
     private final String busId;
     private final int carType;
-    private final double carId;
+    private double carId;
     private final int dutyStatus;
     private final int busStatus;
     private final double routeId;
@@ -26,7 +26,7 @@ public class BusData {
     private double latitude;
     private final double speed;
     private final double azimuth;
-    private final Date dataTime;
+    private Date dataTime;
     private int stopId;
     private String stopLocationName;
     private String routeName;
@@ -76,7 +76,7 @@ public class BusData {
 
     @Override
     public String toString() {
-        String vdDataStr = String.format("%1$s, %2$d, %3$.1f, %4$s, %5$.1f, %6$s, %7$d, %8$d, %9$.1f, %10$s, %11$d, %12$.6f, %13$.6f, %14$.6f, %15$.6f, %16$d, %17$s", this.getTimeStr(), carType, providerId, getProviderName(), carId, busId, dutyStatus, busStatus, routeId, getRouteName(), goBack, getLongitude(), getLatitude(), speed, azimuth, stopId, getStopLocationName());
+        String vdDataStr = String.format("%1$s, %2$d, %3$.1f, %4$s, %5$.1f, %6$s, %7$d, %8$d, %9$.1f, %10$s, %11$d, %12$.6f, %13$.6f, %14$.6f, %15$.6f, %16$d, %17$s", this.getTimeStr(), carType, providerId, getProviderName(), getCarId(), busId, dutyStatus, busStatus, routeId, getRouteName(), goBack, getLongitude(), getLatitude(), speed, azimuth, stopId, getStopLocationName());
         return vdDataStr;
     }
 
@@ -245,6 +245,20 @@ public class BusData {
      */
     public void setLatitude(double latitude) {
         this.latitude = latitude;
+    }
+
+    /**
+     * @param carId the carId to set
+     */
+    public void setCarId(double carId) {
+        this.carId = carId;
+    }
+
+    /**
+     * @param dataTime the dataTime to set
+     */
+    public void setDataTime(Date dataTime) {
+        this.dataTime = dataTime;
     }
 
 }

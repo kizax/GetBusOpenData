@@ -76,7 +76,7 @@ public class BusDataDaoImpl implements BusDataDao {
     public TreeMap<Integer, BusData> getLatestBusDataMap() {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
-        String sql = "SELECT carid, datatime, latitude, longitude FROM busdb.busdata WHERE datatime > ( NOW() - INTERVAL 10 MINUTE ) GROUP BY carid ORDER BY datatime DESC ";
+        String sql = "SELECT carid, MAX(datatime), latitude, longitude FROM busdb.busdata WHERE datatime > ( NOW() - INTERVAL 10 MINUTE ) group by carid order by MAX(datatime) DESC ";
 
         TreeMap<Integer, BusData> busDataMap = new  TreeMap<>();
         try {
@@ -88,11 +88,15 @@ public class BusDataDaoImpl implements BusDataDao {
 
             while (resultSet.next()) {
                 int carId = resultSet.getInt("carid");
-                double longitude = (double) resultSet.getFloat("longitude");
-                double latitude = (double) resultSet.getFloat("latitude");
+                Date datatime = new Date(resultSet.getTimestamp("MAX(datatime)").getTime());
+                double longitude = resultSet.getDouble("longitude");
+                double latitude = resultSet.getDouble("latitude");
                 BusData busData = new BusData();
+                busData.setCarId(carId);
                 busData.setLongitude(longitude);
                 busData.setLatitude(latitude);
+                busData.setDataTime(datatime);
+                
                 busDataMap.put(carId, busData);
             }
         } catch (SQLException ex) {

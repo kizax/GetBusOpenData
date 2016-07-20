@@ -178,13 +178,18 @@ public class GetOpenDataTask extends TimerTask {
 
                 double longitudeDiff = latestBusData.getLongitude() - busData.getLongitude();
                 double latitudeDiff = latestBusData.getLatitude() - busData.getLatitude();
+                Date latestTime = latestBusData.getDataTime();
+                Date dataTime = busData.getDataTime();
 
-                if ((Math.abs(longitudeDiff) >= 0.000002) || (Math.abs(latitudeDiff) >= 0.000002)) {
+                if  ( !(TimestampUtils.dateToStr(latestTime).equals(TimestampUtils.dateToStr(dataTime)) ) && ((Math.abs(longitudeDiff) > 0.000025) || (Math.abs(latitudeDiff) > 0.000025)) ){
+System.out.println(String.format("insert\t latestBusData %1$10.0f: %2$s %3$5.10f %4$5.10f, busData %5$10.0f: %6$s %7$5.10f %8$5.10f",
+                            latestBusData.getCarId(), TimestampUtils.dateToStr(latestTime), latestBusData.getLongitude(), latestBusData.getLatitude(), busData.getCarId(), TimestampUtils.dateToStr(dataTime), busData.getLongitude(), busData.getLatitude()));
+
                     needUpdatedBusDataList.add(busData);
                 } 
 //                else {
-//                    System.out.println(String.format("latestBusData %1$10.0f: %2$5.10f %3$5.10f, busData %4$10.0f: %5$5.10f %6$5.10f",
-//                            latestBusData.getCarId(), latestBusData.getLongitude(), latestBusData.getLatitude(), busData.getCarId(), busData.getLongitude(), busData.getLatitude()));
+//                    System.out.println(String.format("discard\t latestBusData %1$10.0f: %2$s %3$5.10f %4$5.10f, busData %5$10.0f: %6$s %7$5.10f %8$5.10f",
+//                            latestBusData.getCarId(), TimestampUtils.dateToStr(latestTime), latestBusData.getLongitude(), latestBusData.getLatitude(), busData.getCarId(), TimestampUtils.dateToStr(dataTime), busData.getLongitude(), busData.getLatitude()));
 //                }
 
             }
