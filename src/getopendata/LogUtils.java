@@ -23,5 +23,12 @@ public class LogUtils {
         WriteThread writerThread = new WriteThread(logFileWriter, logStr);
         writerThread.start();
     }
+    
+        public static void clearLog(TextArea logTextArea) {
+        Platform.runLater(() -> {
+            logTextArea.clear();
+        });
+
+    }
 
 }

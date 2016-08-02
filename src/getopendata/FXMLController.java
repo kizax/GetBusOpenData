@@ -29,10 +29,12 @@ public class FXMLController implements Initializable {
     @FXML
     private TextArea logTextArea;
     @FXML
-    private Timer timer;
+    private Timer getOpenDataTaskTimer;
+    private Timer clearLogTextAreaTaskTimer;
     @FXML
     private Button startButton;
     private int timeInterval;
+    private int clearLogTimeInterval;
     private boolean isStarted = false;
     private final String logFileName = "./record/log.txt";
     private FileWriter logFileWriter;
@@ -62,18 +64,21 @@ public class FXMLController implements Initializable {
             }
 
             Date date = new Date();
-            timer = new Timer();
+            getOpenDataTaskTimer = new Timer();
+            clearLogTextAreaTaskTimer = new Timer();
 
             LogUtils.log(logFileWriter, logTextArea, String.format("%1$s\tStart Bus Open Data Regular Downloader!", TimestampUtils.getTimestampStr()));
 
-            timer.scheduleAtFixedRate(new GetOpenDataTask(logFileWriter, logTextArea), date, timeInterval);
+            getOpenDataTaskTimer.scheduleAtFixedRate(new GetOpenDataTask(logFileWriter, logTextArea), date, timeInterval);
+            clearLogTextAreaTaskTimer.scheduleAtFixedRate(new ClearLogTextAreaTask(logTextArea), date, clearLogTimeInterval);
 
             isStarted = true;
             startButton.setStyle("-fx-background-color: #cc0639;");
             startButton.setText("暫停收集資料");
 
         } else {
-            timer.cancel();
+            getOpenDataTaskTimer.cancel();
+            clearLogTextAreaTaskTimer.cancel();
 
             LogUtils.log(logFileWriter, logTextArea, String.format("%1$s\tThe timer stop.", TimestampUtils.getTimestampStr()));
 
@@ -87,6 +92,7 @@ public class FXMLController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         timeInterval = 10 * 1000; //in millissecond
+        clearLogTimeInterval = 24 * 60 * 60 * 1000; //in millissecond
         startButton.setStyle("-fx-background-color: #00984f;");
         startButton.setText("開始收集資料");
 
