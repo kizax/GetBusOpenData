@@ -2,15 +2,13 @@ obproject/private/
 builprivate/
 build/
 nbbuild/
-dist/
 nbdist/
 nbactions.xml
 .nb-gradle//
 nbbuild/
-dist/
 nbdist/
 nbactions.xml
 .nb-gradle/
 /record
 /dbsetting
-
+dist/dbsetting

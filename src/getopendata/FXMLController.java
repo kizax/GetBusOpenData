@@ -92,7 +92,7 @@ public class FXMLController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         timeInterval = 10 * 1000; //in millissecond
-        clearLogTimeInterval = 24 * 60 * 60 * 1000; //in millissecond
+        clearLogTimeInterval = 1 * 60 * 60 * 1000; //in millissecond
         startButton.setStyle("-fx-background-color: #00984f;");
         startButton.setText("開始收集資料");
 
