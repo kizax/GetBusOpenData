@@ -12,3 +12,5 @@ nbactions.xml
 /record
 /dbsetting
 dist/dbsetting
+dist/record/log.txt
+nbproject/private/profiler

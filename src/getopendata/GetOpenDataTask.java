@@ -198,6 +198,8 @@ System.out.println(String.format("insert\t latestBusData %1$10.0f: %2$s %3$5.10f
             busDataDaoImpl.add(needUpdatedBusDataList);
 
             LogUtils.log(logFileWriter, logTextArea, String.format("%1$s\tSuccessfully writing data into busdb", TimestampUtils.getTimestampStr()));
+            
+            System.gc();
 
         } catch (IOException ex) {
             Logger.getLogger(OpenDataRegularDownloader.class.getName()).log(Level.SEVERE, null, ex);
