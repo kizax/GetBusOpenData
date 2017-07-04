@@ -48,7 +48,12 @@ public class BusDataJsonParser {
 
             String tempRouteId = (String) busJsonObj.get("RouteID");
             double routeId = (double) Double.parseDouble(tempRouteId);
-            int goBack = Integer.parseInt((String)busJsonObj.get("GoBack"));
+            int goBack = 0;
+            try {
+                goBack = Integer.parseInt((String)busJsonObj.get("GoBack"));
+            }
+            catch (NumberFormatException e) {
+            } 
             
             String tempLongitude = (String) busJsonObj.get("Longitude");
             double longitude =  (double) Double.parseDouble(tempLongitude);
@@ -105,7 +110,12 @@ public class BusDataJsonParser {
             String tempRouteId = (String) busJsonObj.get("RouteID");
             double routeId = (double) Double.parseDouble(tempRouteId);
             
-            int goBack = busJsonObj.getInt("GoBack");
+            int goBack = 0;
+            try {
+                goBack = Integer.parseInt((String)busJsonObj.get("GoBack"));
+            }
+            catch (NumberFormatException e) {
+            } 
             int stopId = busJsonObj.getInt("StopID");
             int carOnStop = busJsonObj.getInt("CarOnStop");
 
